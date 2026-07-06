@@ -330,7 +330,7 @@
         <button class="drawer-close" id="parkClose">✕</button>
       </div>
       <div class="drawer-body">
-        <p style="color:var(--muted);font-size:12.5px;margin:0 0 12px;line-height:1.5">Dump any stray thought here so it stops nagging — sort it into a map later. Shared across all chapters.</p>
+        <p style="color:var(--muted);font-size:12.5px;margin:0 0 12px;line-height:1.5">Dump any stray thought for <b id="parkChapterName">this chapter</b> here so it stops nagging — sort it into the map later.</p>
         <div class="park-input">
           <textarea id="parkText" placeholder="Type a stray thought and press Enter…"></textarea>
         </div>
@@ -429,8 +429,8 @@
   function seed(){
     const chId=uid();
     const t=chain([["Framing / hook","idea"],["The gap in the field","gap"],["Research question","question"],["My contribution","claim"]]);
-    return { version:3, theme:"dark", dys:false, currentChapterId:chId, parking:[],
-      chapters:[{ id:chId, title:"Chapter 1 — Introduction", color:COLORS[0], rq:"", thesis:"", argument:"",
+    return { version:3, theme:"dark", dys:false, currentChapterId:chId,
+      chapters:[{ id:chId, title:"Chapter 1 — Introduction", color:COLORS[0], rq:"", thesis:"", argument:"", parking:[],
         map:{ pan:{x:140,y:70}, zoom:1, nodes:t.nodes, edges:t.edges } }] };
   }
 
@@ -440,8 +440,10 @@
     if(!d) return d;
     if(!d.theme) d.theme="dark";
     if(typeof d.dys!=="boolean") d.dys=false;
-    if(!Array.isArray(d.parking)) d.parking=[];
-    (d.chapters||[]).forEach(ch=>{ ch.rq=ch.rq||""; ch.thesis=ch.thesis||""; ch.argument=ch.argument||""; migrateMap(ch.map); });
+    (d.chapters||[]).forEach(ch=>{ ch.rq=ch.rq||""; ch.thesis=ch.thesis||""; ch.argument=ch.argument||""; if(!Array.isArray(ch.parking)) ch.parking=[]; migrateMap(ch.map); });
+    // migrate legacy global parking lot into the first chapter
+    if(Array.isArray(d.parking) && d.parking.length && d.chapters && d.chapters[0]) d.chapters[0].parking = d.parking.concat(d.chapters[0].parking);
+    delete d.parking;
     d.version=3; return d;
   }
   function migrateMap(m){
@@ -518,7 +520,7 @@
       const div=document.createElement("div");
       div.className="chapter-item"+(ch.id===state.currentChapterId?" active":"");
       div.innerHTML=`<span class="dot" style="background:${ch.color}"></span><span class="name">${escapeHtml(ch.title)}</span><span class="count">${ch.map.nodes.length}</span>`;
-      div.onclick=()=>{ if(ch.id!==state.currentChapterId){ state.currentChapterId=ch.id; ui.path=[]; ui.selected=null; closeDrawers(); renderAll(); scheduleSave(); } };
+      div.onclick=()=>{ if(ch.id!==state.currentChapterId){ state.currentChapterId=ch.id; ui.path=[]; ui.selected=null; closeInspector(); renderAll(); scheduleSave(); } };
       els.chapterList.appendChild(div);
     });
   }
@@ -615,7 +617,7 @@
     txt.addEventListener("pointerdown",ev=>ev.stopPropagation());
 
     el.querySelectorAll("[data-inspect]").forEach(b=>b.addEventListener("click",ev=>{ ev.stopPropagation(); openInspector(n.id); }));
-    el.querySelector("[data-sub]").addEventListener("click",ev=>{ ev.stopPropagation(); if(!n.map) n.map={pan:{x:100,y:80},zoom:1,nodes:[],edges:[]}; ui.path=[...ui.path,n.id]; ui.selected=null; ui.connectSrc=null; setConnect(false); closeDrawers(); renderAll(); scheduleSave(); });
+    el.querySelector("[data-sub]").addEventListener("click",ev=>{ ev.stopPropagation(); if(!n.map) n.map={pan:{x:100,y:80},zoom:1,nodes:[],edges:[]}; ui.path=[...ui.path,n.id]; ui.selected=null; ui.connectSrc=null; setConnect(false); closeInspector(); renderAll(); scheduleSave(); });
     el.querySelector("[data-color]").addEventListener("click",ev=>{ ev.stopPropagation(); openSwatches(ev.currentTarget,c=>{ beginChange(); n.color=c; renderMap(); scheduleSave(); }, n.color); });
     const coll=el.querySelector("[data-collapse]");
     if(coll) coll.addEventListener("click",ev=>{ ev.stopPropagation(); beginChange(); n.collapsed=!n.collapsed; renderMap(); scheduleSave(); });
@@ -753,25 +755,28 @@
   function openParking(){ els.inspector.classList.remove("show"); els.parking.classList.add("show"); renderParking(); setTimeout(()=>els.parkText.focus(),60); }
   function renderParking(){
     els.parkList.innerHTML="";
-    if(!state.parking.length){ els.parkList.innerHTML='<div class="park-empty">Nothing parked yet.<br>Thoughts you dump here wait until you\'re ready for them.</div>'; return; }
-    state.parking.forEach(item=>{
+    const ch=chapter();
+    const nm=$("parkChapterName"); if(nm) nm.textContent=ch.title;
+    if(!ch.parking.length){ els.parkList.innerHTML='<div class="park-empty">Nothing parked for this chapter yet.<br>Thoughts you dump here wait until you\'re ready for them.</div>'; return; }
+    ch.parking.forEach(item=>{
       const d=document.createElement("div"); d.className="park-item";
       d.innerHTML=`<div class="pt">${escapeHtml(item.text)}</div><div class="pa"><button class="mini" data-map title="Drop into current map as a node">→ map</button><button class="mini" data-del title="Delete">🗑</button></div>`;
-      d.querySelector("[data-map]").onclick=()=>{ beginChange(); const m=currentMap(); const r=els.canvasWrap.getBoundingClientRect(); const nn=mkNode(item.text,"idea",(r.width/2-m.pan.x)/m.zoom-NODE_W/2,(r.height/2-m.pan.y)/m.zoom-30); nn.color=chapter().color; m.nodes.push(nn); state.parking=state.parking.filter(x=>x.id!==item.id); renderParking(); renderMap(); renderChapters(); scheduleSave(); };
-      d.querySelector("[data-del]").onclick=()=>{ beginChange(); state.parking=state.parking.filter(x=>x.id!==item.id); renderParking(); scheduleSave(); };
+      d.querySelector("[data-map]").onclick=()=>{ beginChange(); const m=currentMap(); const r=els.canvasWrap.getBoundingClientRect(); const nn=mkNode(item.text,"idea",(r.width/2-m.pan.x)/m.zoom-NODE_W/2,(r.height/2-m.pan.y)/m.zoom-30); nn.color=chapter().color; m.nodes.push(nn); chapter().parking=chapter().parking.filter(x=>x.id!==item.id); renderParking(); renderMap(); renderChapters(); scheduleSave(); };
+      d.querySelector("[data-del]").onclick=()=>{ beginChange(); chapter().parking=chapter().parking.filter(x=>x.id!==item.id); renderParking(); scheduleSave(); };
       els.parkList.appendChild(d);
     });
   }
-  function addParking(){ const t=els.parkText.value.trim(); if(!t)return; beginChange(); state.parking.unshift({id:uid(),text:t}); els.parkText.value=""; renderParking(); scheduleSave(); }
+  function addParking(){ const t=els.parkText.value.trim(); if(!t)return; beginChange(); chapter().parking.unshift({id:uid(),text:t}); els.parkText.value=""; renderParking(); scheduleSave(); }
 
-  function closeDrawers(){ els.inspector.classList.remove("show"); els.parking.classList.remove("show"); ui.inspectId=null; }
+  function closeInspector(){ els.inspector.classList.remove("show"); ui.inspectId=null; }
+  function closeDrawers(){ closeInspector(); els.parking.classList.remove("show"); }
 
   // ---- chapters CRUD + templates ----
   function newChapter(){
     ui.modalTpl="blank";
     openModal({ title:"New chapter", desc:"Name it, pick a colour, and optionally start from a template.", value:"Chapter "+(state.chapters.length+1)+" — ", color:COLORS[state.chapters.length%COLORS.length], showTpl:true,
       ok:(name,color,tpl)=>{ beginChange(); const built=(TEMPLATES.find(t=>t.key===tpl)||TEMPLATES[0]).build();
-        const ch={id:uid(),title:name||("Chapter "+(state.chapters.length+1)),color,rq:"",thesis:"",argument:"",map:{pan:{x:140,y:70},zoom:1,nodes:built.nodes,edges:built.edges}};
+        const ch={id:uid(),title:name||("Chapter "+(state.chapters.length+1)),color,rq:"",thesis:"",argument:"",parking:[],map:{pan:{x:140,y:70},zoom:1,nodes:built.nodes,edges:built.edges}};
         state.chapters.push(ch); state.currentChapterId=ch.id; ui.path=[]; ui.selected=null; closeDrawers(); renderAll(); scheduleSave(); } });
   }
   function renameChapter(){ const ch=chapter(); openModal({ title:"Edit chapter", desc:"Rename or recolour this chapter.", value:ch.title, color:ch.color, showTpl:false, ok:(name,color)=>{ beginChange(); ch.title=name||ch.title; ch.color=color; renderAll(); scheduleSave(); } }); }
