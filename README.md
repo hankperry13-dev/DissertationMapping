@@ -16,9 +16,17 @@ Everything you type is saved automatically in your browser on that device. Use *
 ## Features
 
 - **Chapters** — one map per chapter, each with its own colour, listed in the sidebar.
-- **Sub‑maps** — click *Open sub‑map* on any node to zoom into a nested map for that idea; nest as deep as you like. Breadcrumbs at the top let you jump back out.
+- **Templates** — start a new chapter from a preset structure (Introduction, Literature review, Methodology, Empirical/results, Argument/discussion, IMRaD) instead of a blank canvas.
+- **Sub‑maps** — click the *sub‑map* icon (`⤢`) on any node to zoom into a nested map for that idea; nest as deep as you like. Breadcrumbs at the top let you jump back out.
 - **Argument panel** — per‑chapter **Research question**, **Thesis / claim**, and **Argument summary** fields to hold your through‑line.
-- **Fast, tactile mapping** — double‑click the canvas to add a node, drag the purple handle on a node to draw a connection (or drop it on empty space to make a linked child), colour‑code nodes, drag to rearrange, pan and zoom.
+- **Argument‑checker prompts** — give a node a *type* (Claim, Evidence, Counter‑point, Gap, Method, Source, Question, To‑do, Idea) and the details panel asks type‑specific questions ("What evidence backs it up?", "What would a critic say?") with answer boxes and a completeness meter. Free‑form **notes** live here too.
+- **Collapse / expand** — fold a node's branch (the `−`/`+` button under it) to hide its descendants and cut visual load; the button shows how many nodes are hidden.
+- **Connection styles** — click any connection to set its relationship — *Relates to, Leads to, Supports, Contradicts, Causes, Example of* — each with its own colour, line style and arrow, plus an optional label.
+- **Parking lot** (`🅿`) — a shared scratch drawer to dump stray thoughts the moment they occur, without derailing; sort them into a map (or delete them) later.
+- **Undo / redo** — full history with the toolbar arrows or `Ctrl/Cmd+Z` and `Ctrl/Cmd+Y` (`Shift` to redo).
+- **Print / PDF** (`🖨`) — generate a clean one‑pager for a chapter: title, argument summary, the map, and a text outline. Print to paper or "Save as PDF".
+- **Fast, tactile mapping** — double‑click the canvas to add a node, drag the handle on a node to draw a connection (or drop it on empty space to make a linked child), colour‑code nodes, drag to rearrange, pan and zoom.
+- **Light / dark theme** (`🌙`/`☀`) and a **dyslexia‑friendly font** toggle (`Aa`).
 - **Focus mode** — hide the sidebar (`☰`) to reduce clutter.
 - **Local & private** — data lives in your browser via `localStorage`; nothing is sent anywhere. Export/Import gives you portable JSON backups.
 
@@ -29,8 +37,10 @@ Everything you type is saved automatically in your browser on that device. Use *
 | `N` | Add node |
 | `C` | Toggle connect mode |
 | `F` | Fit map to screen |
+| `Ctrl/Cmd+Z` | Undo |
+| `Ctrl/Cmd+Y` / `Ctrl/Cmd+Shift+Z` | Redo |
 | `Del` / `Backspace` | Delete selected node |
-| `Esc` | Exit connect mode / close popovers |
+| `Esc` | Exit connect mode / close popovers & panels |
 | Double‑click canvas | Add a node where you click |
 | `Enter` (editing a node) | Finish editing |
 

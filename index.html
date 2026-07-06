@@ -6,68 +6,47 @@
 <title>Dissertation Mapping — Chapter Mind Maps</title>
 <style>
   :root{
-    --bg:#0f1220;
-    --panel:#171a2b;
-    --panel-2:#1e2238;
-    --line:#2b3050;
-    --text:#e8eaf5;
-    --muted:#9aa0c0;
-    --accent:#7c5cff;
-    --accent-2:#22d3ee;
-    --danger:#ff5c7c;
-    --ok:#37d99a;
-    --radius:14px;
-    --shadow:0 10px 30px rgba(0,0,0,.35);
-    --node-w:180px;
-    font-synthesis:none;
+    --bg:#0f1220; --panel:#171a2b; --panel-2:#1e2238; --line:#2b3050;
+    --text:#e8eaf5; --muted:#9aa0c0; --accent:#7c5cff; --accent-2:#22d3ee;
+    --danger:#ff5c7c; --ok:#37d99a; --chip:#0d1020; --edge:#5b62a0; --grid:#2a2f52;
+    --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.35);
+    --node-w:200px; font-synthesis:none;
+  }
+  :root[data-theme="light"]{
+    --bg:#f5f6fc; --panel:#ffffff; --panel-2:#f0f1f9; --line:#dde0ee;
+    --text:#1b2030; --muted:#5c628a; --chip:#eef0f8; --edge:#a2a8d0; --grid:#dfe2f2;
+    --shadow:0 10px 26px rgba(40,50,90,.14);
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
+  html,body{height:100%;overflow:hidden}
   body{
-    margin:0;
-    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-    background:radial-gradient(1200px 800px at 15% -10%, #1b2140 0%, var(--bg) 55%) fixed;
-    color:var(--text);
-    overflow:hidden;
-    -webkit-font-smoothing:antialiased;
+    margin:0;font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
   }
+  :root[data-theme="dark"] body{background:radial-gradient(1200px 800px at 15% -10%, #1b2140 0%, #0f1220 55%) fixed;}
+  :root.dys body{font-family:"Comic Sans MS","Trebuchet MS",Verdana,sans-serif;letter-spacing:.02em}
   button{font-family:inherit}
   .app{display:grid;grid-template-columns:280px 1fr;height:100vh;transition:grid-template-columns .25s ease}
   .app.focus{grid-template-columns:0 1fr}
 
-  /* ---------------- Sidebar ---------------- */
-  .sidebar{
-    background:linear-gradient(180deg,var(--panel) 0%, #13162400 100%), var(--panel);
-    border-right:1px solid var(--line);
-    display:flex;flex-direction:column;min-width:0;overflow:hidden;
-  }
+  /* Sidebar */
+  .sidebar{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;overflow:hidden}
   .brand{padding:18px 18px 12px;display:flex;align-items:center;gap:10px}
-  .brand .logo{
-    width:34px;height:34px;border-radius:10px;flex:0 0 auto;
-    background:conic-gradient(from 210deg, var(--accent), var(--accent-2), var(--accent));
-    box-shadow:0 6px 18px rgba(124,92,255,.45);
-    display:grid;place-items:center;font-weight:800;color:#0b0d18;
-  }
+  .brand .logo{width:34px;height:34px;border-radius:10px;flex:0 0 auto;background:conic-gradient(from 210deg, var(--accent), var(--accent-2), var(--accent));box-shadow:0 6px 18px rgba(124,92,255,.45);display:grid;place-items:center;font-weight:800;color:#0b0d18}
   .brand h1{font-size:15px;margin:0;line-height:1.15;font-weight:700;letter-spacing:.2px}
   .brand p{margin:2px 0 0;font-size:11px;color:var(--muted)}
   .side-scroll{overflow:auto;padding:6px 12px 12px;flex:1}
   .side-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:14px 6px 8px;font-weight:700}
-  .chapter-item{
-    display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:11px;cursor:pointer;
-    border:1px solid transparent;margin-bottom:5px;transition:background .12s,border-color .12s;
-  }
+  .chapter-item{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:11px;cursor:pointer;border:1px solid transparent;margin-bottom:5px;transition:background .12s,border-color .12s}
   .chapter-item:hover{background:var(--panel-2)}
   .chapter-item.active{background:var(--panel-2);border-color:var(--line)}
   .chapter-item .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 0 3px rgba(255,255,255,.04)}
   .chapter-item .name{flex:1;min-width:0;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .chapter-item .count{font-size:11px;color:var(--muted);background:#0d1020;border:1px solid var(--line);padding:1px 7px;border-radius:20px}
-  .btn{
-    border:1px solid var(--line);background:var(--panel-2);color:var(--text);
-    padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;
-    display:inline-flex;align-items:center;gap:7px;transition:transform .06s, background .12s, border-color .12s;
-  }
-  .btn:hover{background:#262b46;border-color:#3a406a}
+  .chapter-item .count{font-size:11px;color:var(--muted);background:var(--chip);border:1px solid var(--line);padding:1px 7px;border-radius:20px}
+  .btn{border:1px solid var(--line);background:var(--panel-2);color:var(--text);padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:7px;transition:transform .06s, background .12s, border-color .12s}
+  .btn:hover{background:var(--line)}
   .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
   .btn.block{width:100%;justify-content:center}
   .btn.primary{background:linear-gradient(180deg,var(--accent),#6a4cf0);border-color:#6a4cf0;color:#fff;box-shadow:0 6px 16px rgba(124,92,255,.35)}
   .btn.primary:hover{background:linear-gradient(180deg,#8b6dff,#7458ff)}
@@ -79,129 +58,167 @@
   .side-footer .row .btn{flex:1;justify-content:center}
   .save-note{font-size:11px;color:var(--muted);text-align:center}
 
-  /* ---------------- Main ---------------- */
+  /* Main */
   .main{display:flex;flex-direction:column;min-width:0;position:relative}
-  .topbar{
-    display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);
-    background:rgba(15,18,32,.6);backdrop-filter:blur(6px);z-index:5;
-  }
-  .icon-btn{
-    width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--panel-2);
-    color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:16px;flex:0 0 auto;
-  }
-  .icon-btn:hover{background:#262b46}
-  .breadcrumb{display:flex;align-items:center;gap:7px;flex:1;min-width:0;overflow:hidden;font-size:14px}
+  .topbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:color-mix(in srgb, var(--bg) 70%, transparent);backdrop-filter:blur(6px);z-index:8}
+  .icon-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:15px;flex:0 0 auto}
+  .icon-btn:hover{background:var(--line)}
+  .icon-btn:disabled{opacity:.35;cursor:not-allowed}
+  .icon-btn.on{background:rgba(34,211,238,.14);color:var(--accent-2);border-color:rgba(34,211,238,.35)}
+  .breadcrumb{display:flex;align-items:center;gap:6px;flex:1;min-width:0;overflow:hidden;font-size:14px}
   .crumb{color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;padding:4px 8px;border-radius:8px}
   .crumb:hover{background:var(--panel-2);color:var(--text)}
   .crumb.current{color:var(--text);font-weight:700;cursor:default}
   .crumb.current:hover{background:transparent}
-  .crumb-sep{color:#4a5080;flex:0 0 auto}
-  .top-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .crumb-sep{color:var(--muted);opacity:.6;flex:0 0 auto}
+  .top-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+  .vsep{width:1px;height:22px;background:var(--line);margin:0 2px}
 
-  /* Argument panel */
+  /* Argument bar */
   .argbar{border-bottom:1px solid var(--line);background:var(--panel)}
-  .argbar .arg-toggle{
-    width:100%;display:flex;align-items:center;gap:10px;padding:11px 16px;background:transparent;border:0;color:var(--text);
-    cursor:pointer;font-size:13px;font-weight:700;text-align:left;
-  }
+  .argbar .arg-toggle{width:100%;display:flex;align-items:center;gap:10px;padding:11px 16px;background:transparent;border:0;color:var(--text);cursor:pointer;font-size:13px;font-weight:700;text-align:left}
   .argbar .arg-toggle .chev{transition:transform .2s;color:var(--muted)}
   .argbar.open .arg-toggle .chev{transform:rotate(90deg)}
   .arg-body{display:none;padding:2px 16px 16px;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
   .argbar.open .arg-body{display:grid}
   .field label{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin-bottom:6px}
-  .field textarea{
-    width:100%;min-height:74px;resize:vertical;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
-    color:var(--text);padding:10px 12px;font-size:13.5px;line-height:1.5;font-family:inherit;
-  }
+  .field textarea{width:100%;min-height:74px;resize:vertical;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:10px 12px;font-size:13.5px;line-height:1.5;font-family:inherit}
   .field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.18)}
-  .field .tag{font-size:9px}
+  .tag{padding:2px 6px;border-radius:6px;font-size:9px;color:#06121e}
 
   /* Canvas */
   .canvas-wrap{flex:1;position:relative;overflow:hidden;cursor:grab}
   .canvas-wrap.panning{cursor:grabbing}
   .canvas-wrap.connect{cursor:crosshair}
-  .grid-bg{position:absolute;inset:0;
-    background-image:radial-gradient(circle at center, #2a2f52 1px, transparent 1px);
-    background-size:26px 26px;opacity:.5;pointer-events:none;
-  }
+  .grid-bg{position:absolute;inset:0;background-image:radial-gradient(circle at center, var(--grid) 1px, transparent 1px);background-size:26px 26px;opacity:.55;pointer-events:none}
   .viewport{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
   .edges{position:absolute;top:0;left:0;overflow:visible;pointer-events:none}
-  .edges path{fill:none;stroke:#5b62a0;stroke-width:2.5;opacity:.9}
-  .edges path.temp{stroke:var(--accent-2);stroke-dasharray:6 6}
+  .edges path.wire{fill:none;stroke-width:2.5}
+  .edges path.hit{fill:none;stroke:transparent;stroke-width:16;pointer-events:stroke;cursor:pointer}
+  .edges path.temp{fill:none;stroke:var(--accent-2);stroke-width:2.5;stroke-dasharray:6 6}
+  .edges text{font-size:11px;font-weight:700;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
 
-  .node{
-    position:absolute;width:var(--node-w);background:var(--panel-2);border:1.5px solid var(--line);
-    border-radius:13px;box-shadow:var(--shadow);user-select:none;
-  }
+  .node{position:absolute;width:var(--node-w);background:var(--panel-2);border:1.5px solid var(--line);border-radius:13px;box-shadow:var(--shadow);user-select:none}
   .node .accent{height:6px;border-radius:12px 12px 0 0;background:var(--accent)}
-  .node .body{padding:10px 12px 11px}
-  .node .txt{
-    font-size:13.5px;line-height:1.45;font-weight:600;min-height:20px;outline:none;word-break:break-word;white-space:pre-wrap;
-  }
+  .node .body{padding:9px 12px 6px}
+  .node .txt{font-size:13.5px;line-height:1.45;font-weight:600;min-height:20px;outline:none;word-break:break-word;white-space:pre-wrap}
   .node .txt:empty::before{content:"New idea…";color:var(--muted);font-weight:500}
   .node.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.28), var(--shadow)}
   .node.connect-src{border-color:var(--accent-2);box-shadow:0 0 0 3px rgba(34,211,238,.3)}
-  .node .foot{display:flex;align-items:center;gap:6px;padding:0 10px 9px;justify-content:space-between}
-  .node .submap-badge{
-    display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--accent-2);font-weight:700;cursor:pointer;
-    padding:3px 8px;border-radius:20px;border:1px solid rgba(34,211,238,.3);background:rgba(34,211,238,.08);
-  }
-  .node .submap-badge:hover{background:rgba(34,211,238,.16)}
-  .node .submap-badge.empty{color:var(--muted);border-color:var(--line);background:transparent}
-  .node .submap-badge.empty:hover{color:var(--accent-2);border-color:rgba(34,211,238,.3)}
-  .node .nub{
-    position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;
-    background:var(--accent);border:2px solid var(--panel);cursor:crosshair;display:none;
-  }
+  .node .foot{display:flex;align-items:center;gap:6px;padding:0 9px 9px}
+  .type-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;cursor:pointer;max-width:120px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border:1px solid transparent}
+  .type-pill:hover{filter:brightness(1.1)}
+  .foot-icons{margin-left:auto;display:flex;align-items:center;gap:4px}
+  .mini{border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;border-radius:8px;padding:3px 6px;font-size:12px;display:inline-flex;align-items:center;gap:3px}
+  .mini:hover{color:var(--text);border-color:var(--muted)}
+  .mini.has{color:var(--accent-2);border-color:rgba(34,211,238,.4)}
+  .mini sup{font-size:9px}
+  .collapse{position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);min-width:24px;height:24px;padding:0 6px;border-radius:20px;border:1.5px solid var(--line);background:var(--panel);color:var(--text);cursor:pointer;font-size:12px;font-weight:800;display:inline-flex;align-items:center;gap:3px;z-index:2}
+  .collapse:hover{border-color:var(--accent)}
+  .collapse .cc{font-size:10px;color:var(--muted);font-weight:700}
+  .node .nub{position:absolute;right:-8px;top:44px;width:18px;height:18px;border-radius:50%;background:var(--accent);border:2px solid var(--panel);cursor:crosshair;display:none}
   .node:hover .nub{display:block}
 
-  /* floating toolbar */
-  .toolbar{
-    position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:6;
-    display:flex;align-items:center;gap:6px;padding:7px;border-radius:14px;
-    background:rgba(23,26,43,.92);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(8px);
-  }
+  /* toolbar */
+  .toolbar{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:6px;padding:7px;border-radius:14px;background:color-mix(in srgb, var(--panel) 92%, transparent);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
   .toolbar .sep{width:1px;height:24px;background:var(--line);margin:0 3px}
-  .toolbar .tb{
-    border:1px solid transparent;background:transparent;color:var(--text);cursor:pointer;padding:8px 11px;border-radius:9px;
-    font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:7px;
-  }
+  .toolbar .tb{border:1px solid transparent;background:transparent;color:var(--text);cursor:pointer;padding:8px 11px;border-radius:9px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
   .toolbar .tb:hover{background:var(--panel-2)}
   .toolbar .tb.on{background:rgba(34,211,238,.14);color:var(--accent-2);border-color:rgba(34,211,238,.35)}
   .toolbar .tb.danger:hover{color:var(--danger)}
   .zoom-label{font-size:12px;color:var(--muted);min-width:44px;text-align:center}
 
-  /* color popover */
-  .swatches{position:absolute;z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px;
-    box-shadow:var(--shadow);display:none;grid-template-columns:repeat(5,1fr);gap:7px}
-  .swatches.show{display:grid}
+  /* popovers */
+  .pop{position:absolute;z-index:40;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;box-shadow:var(--shadow);display:none}
+  .pop.show{display:block}
+  .swatch-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
   .swatch{width:24px;height:24px;border-radius:7px;cursor:pointer;border:2px solid transparent}
   .swatch:hover{transform:scale(1.12)}
-  .swatch.sel{border-color:#fff}
+  .swatch.sel{border-color:var(--text)}
+  .pop .pop-title{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin:2px 2px 8px}
+  .rel-list{display:flex;flex-direction:column;gap:4px;min-width:160px}
+  .rel-opt{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
+  .rel-opt:hover{background:var(--panel-2)}
+  .rel-opt.sel{background:var(--panel-2)}
+  .rel-line{width:26px;height:0;border-top-width:2.5px;border-top-style:solid;flex:0 0 auto}
+  .rel-input{width:100%;margin-top:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:7px 9px;font-size:12.5px;font-family:inherit}
+  .rel-input:focus{outline:none;border-color:var(--accent)}
+  .pop .pop-del{margin-top:8px;width:100%;justify-content:center}
+
+  /* drawers */
+  .drawer{position:fixed;top:0;right:0;height:100%;width:340px;max-width:90vw;background:var(--panel);border-left:1px solid var(--line);box-shadow:-12px 0 30px rgba(0,0,0,.25);z-index:20;display:flex;flex-direction:column;transform:translateX(105%);transition:transform .22s ease;visibility:hidden}
+  .drawer.show{transform:translateX(0);visibility:visible}
+  .drawer-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .drawer-head h3{margin:0;font-size:15px;flex:1}
+  .drawer-body{overflow:auto;padding:14px 16px 24px;flex:1}
+  .drawer-close{border:0;background:transparent;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
+  .drawer-close:hover{color:var(--text)}
+  .insp-types{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .insp-type{padding:5px 9px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:inline-flex;gap:5px;align-items:center}
+  .insp-type.sel{color:var(--text)}
+  .insp-label{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin:16px 0 6px}
+  .insp-q{margin-bottom:12px}
+  .insp-q .q{font-size:13px;font-weight:600;margin-bottom:5px;display:flex;gap:7px;align-items:flex-start}
+  .insp-q .q .qi{color:var(--accent-2);font-weight:800}
+  .insp-q textarea,.insp-notes{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--text);padding:8px 10px;font-size:13px;line-height:1.45;font-family:inherit;resize:vertical;min-height:52px}
+  .insp-q textarea:focus,.insp-notes:focus{outline:none;border-color:var(--accent)}
+  .insp-progress{height:6px;border-radius:6px;background:var(--panel-2);overflow:hidden;margin:4px 0 2px}
+  .insp-progress > span{display:block;height:100%;background:var(--ok);width:0;transition:width .2s}
+  .insp-meta{font-size:11.5px;color:var(--muted);margin-bottom:6px}
+  /* parking */
+  .park-input{display:flex;gap:8px;margin-bottom:12px}
+  .park-input textarea{flex:1;min-height:44px;max-height:120px;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--text);padding:8px 10px;font-size:13px;font-family:inherit;resize:vertical}
+  .park-item{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:9px 10px;margin-bottom:8px;font-size:13px;line-height:1.4;display:flex;gap:8px;align-items:flex-start}
+  .park-item .pt{flex:1;white-space:pre-wrap;word-break:break-word}
+  .park-item .pa{display:flex;flex-direction:column;gap:4px}
+  .park-item .mini{padding:2px 6px}
+  .park-empty{color:var(--muted);font-size:13px;text-align:center;padding:24px 8px}
 
   .empty-state{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none}
   .empty-state .card{max-width:340px;color:var(--muted);pointer-events:auto}
   .empty-state h3{color:var(--text);margin:0 0 6px;font-size:17px}
   .empty-state p{margin:0 0 16px;font-size:13.5px;line-height:1.5}
-  .kbd{font-size:11px;background:#0d1020;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 6px;color:var(--muted)}
+  .kbd{font-size:11px;background:var(--chip);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 6px;color:var(--muted)}
 
   /* modal */
-  .overlay{position:fixed;inset:0;background:rgba(6,8,16,.6);backdrop-filter:blur(3px);z-index:50;display:none;place-items:center}
+  .overlay{position:fixed;inset:0;background:rgba(6,8,16,.55);backdrop-filter:blur(3px);z-index:50;display:none;place-items:center}
   .overlay.show{display:grid}
-  .modal{width:min(460px,92vw);background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px}
+  .modal{width:min(480px,92vw);max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px}
   .modal h3{margin:0 0 6px;font-size:17px}
-  .modal p{margin:0 0 16px;color:var(--muted);font-size:13.5px;line-height:1.5}
-  .modal input[type=text]{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--text);
-    padding:11px 12px;font-size:14px;font-family:inherit;margin-bottom:8px}
+  .modal p{margin:0 0 14px;color:var(--muted);font-size:13.5px;line-height:1.5}
+  .modal input[type=text]{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:11px 12px;font-size:14px;font-family:inherit;margin-bottom:8px}
   .modal input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.18)}
-  .modal .modal-swatches{display:flex;gap:8px;margin:6px 0 18px}
-  .modal .actions{display:flex;gap:10px;justify-content:flex-end}
-  .hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:7;background:rgba(34,211,238,.14);
-    border:1px solid rgba(34,211,238,.35);color:var(--accent-2);padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:600;display:none}
+  .modal .mlabel{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin:12px 2px 7px}
+  .modal .modal-swatches{display:flex;gap:8px;margin:2px 0 6px}
+  .tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+  .tpl{border:1.5px solid var(--line);background:var(--panel-2);border-radius:11px;padding:10px 11px;cursor:pointer;text-align:left}
+  .tpl.sel{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.18)}
+  .tpl b{display:block;font-size:13px;margin-bottom:2px}
+  .tpl span{font-size:11.5px;color:var(--muted);line-height:1.35}
+  .modal .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+
+  .hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:7;background:rgba(34,211,238,.14);border:1px solid rgba(34,211,238,.35);color:var(--accent-2);padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:600;display:none}
   .hint.show{display:block}
   input[type=file]{display:none}
   ::-webkit-scrollbar{width:10px;height:10px}
-  ::-webkit-scrollbar-thumb{background:#2b3050;border-radius:8px;border:2px solid var(--panel)}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;border:2px solid var(--panel)}
+
+  /* print */
+  #printRoot{display:none}
+  @media print{
+    body{background:#fff !important;overflow:visible}
+    .app,.drawer,.overlay,.pop{display:none !important}
+    #printRoot{display:block;color:#111;padding:0 4px}
+    #printRoot h1{font-size:20px;margin:0 0 4px}
+    #printRoot .p-arg{margin:0 0 14px;font-size:12.5px;line-height:1.5}
+    #printRoot .p-arg b{display:block;color:#333}
+    #printRoot .p-sec{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#666;margin:16px 0 8px;font-weight:700}
+    #printRoot svg{max-width:100%;height:auto;border:1px solid #ddd;border-radius:8px}
+    #printRoot ul{margin:4px 0;padding-left:18px}
+    #printRoot li{font-size:12.5px;margin:3px 0;line-height:1.4}
+    #printRoot .pt-type{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.05em;margin-left:6px}
+    @page{margin:14mm}
+  }
 </style>
 </head>
 <body>
@@ -210,10 +227,7 @@
   <aside class="sidebar">
     <div class="brand">
       <div class="logo">D</div>
-      <div>
-        <h1>Dissertation Mapping</h1>
-        <p>Chapter maps for visual thinkers</p>
-      </div>
+      <div><h1>Dissertation Mapping</h1><p>Chapter maps for visual thinkers</p></div>
     </div>
     <div class="side-scroll">
       <div class="side-label">Chapters</div>
@@ -236,7 +250,15 @@
       <button class="icon-btn" id="focusBtn" title="Toggle sidebar (focus mode)">☰</button>
       <nav class="breadcrumb" id="breadcrumb"></nav>
       <div class="top-actions">
-        <button class="btn ghost tiny" id="renameChapterBtn" title="Rename / recolor this chapter">✎ Chapter</button>
+        <button class="icon-btn" id="undoBtn" title="Undo (Ctrl+Z)">↺</button>
+        <button class="icon-btn" id="redoBtn" title="Redo (Ctrl+Y)">↻</button>
+        <span class="vsep"></span>
+        <button class="icon-btn" id="parkBtn" title="Parking lot — dump stray thoughts">🅿</button>
+        <button class="icon-btn" id="printBtn" title="Print / save as PDF">🖨</button>
+        <button class="icon-btn" id="themeBtn" title="Toggle light / dark">🌙</button>
+        <button class="icon-btn" id="dysBtn" title="Dyslexia-friendly font">Aa</button>
+        <span class="vsep"></span>
+        <button class="btn ghost tiny" id="renameChapterBtn" title="Rename / recolour this chapter">✎ Chapter</button>
         <button class="btn ghost tiny danger" id="deleteChapterBtn" title="Delete this chapter">🗑</button>
       </div>
     </div>
@@ -249,15 +271,15 @@
       </button>
       <div class="arg-body">
         <div class="field">
-          <label><span class="tag" style="background:#37d99a;color:#052; padding:2px 6px;border-radius:6px">RQ</span> Research question</label>
+          <label><span class="tag" style="background:#37d99a">RQ</span> Research question</label>
           <textarea id="fieldRQ" placeholder="What is this chapter actually trying to find out?"></textarea>
         </div>
         <div class="field">
-          <label><span class="tag" style="background:#7c5cff;color:#fff;padding:2px 6px;border-radius:6px">THESIS</span> Thesis / claim</label>
+          <label><span class="tag" style="background:#7c5cff;color:#fff">THESIS</span> Thesis / claim</label>
           <textarea id="fieldThesis" placeholder="In one or two sentences, what does this chapter argue?"></textarea>
         </div>
         <div class="field">
-          <label><span class="tag" style="background:#22d3ee;color:#053;padding:2px 6px;border-radius:6px">ARC</span> Argument summary</label>
+          <label><span class="tag" style="background:#22d3ee">ARC</span> Argument summary</label>
           <textarea id="fieldArgument" placeholder="How does the argument move from start to finish? The through-line that ties the map together."></textarea>
         </div>
       </div>
@@ -281,21 +303,47 @@
       </div>
 
       <div class="toolbar" id="toolbar">
-        <button class="tb" id="tbAdd" title="Add node (double-click canvas)">＋ Node</button>
-        <button class="tb" id="tbConnect" title="Connect nodes">🔗 Connect</button>
+        <button class="tb" id="tbAdd" title="Add node (N or double-click)">＋ Node</button>
+        <button class="tb" id="tbConnect" title="Connect nodes (C)">🔗 Connect</button>
         <button class="tb danger" id="tbDelete" title="Delete selected (Del)">🗑 Delete</button>
         <span class="sep"></span>
         <button class="tb" id="tbZoomOut" title="Zoom out">－</button>
         <span class="zoom-label" id="zoomLabel">100%</span>
         <button class="tb" id="tbZoomIn" title="Zoom in">＋</button>
-        <button class="tb" id="tbFit" title="Fit map to screen">⊡ Fit</button>
+        <button class="tb" id="tbFit" title="Fit map to screen (F)">⊡ Fit</button>
+      </div>
+    </div>
+
+    <!-- Inspector drawer -->
+    <div class="drawer" id="inspector">
+      <div class="drawer-head">
+        <h3>Node details</h3>
+        <button class="drawer-close" id="inspClose">✕</button>
+      </div>
+      <div class="drawer-body" id="inspBody"></div>
+    </div>
+
+    <!-- Parking lot drawer -->
+    <div class="drawer" id="parking">
+      <div class="drawer-head">
+        <h3>🅿 Parking lot</h3>
+        <button class="drawer-close" id="parkClose">✕</button>
+      </div>
+      <div class="drawer-body">
+        <p style="color:var(--muted);font-size:12.5px;margin:0 0 12px;line-height:1.5">Dump any stray thought here so it stops nagging — sort it into a map later. Shared across all chapters.</p>
+        <div class="park-input">
+          <textarea id="parkText" placeholder="Type a stray thought and press Enter…"></textarea>
+        </div>
+        <button class="btn primary block" id="parkAdd" style="margin-bottom:14px">＋ Add to parking lot</button>
+        <div id="parkList"></div>
       </div>
     </div>
   </section>
 </div>
 
-<!-- color popover -->
-<div class="swatches" id="swatches"></div>
+<!-- popovers -->
+<div class="pop" id="swatchPop"><div class="swatch-grid" id="swatchGrid"></div></div>
+<div class="pop" id="edgePop"></div>
 
 <!-- modal -->
 <div class="overlay" id="overlay">
@@ -303,7 +351,12 @@
     <h3 id="modalTitle">New chapter</h3>
     <p id="modalDesc">Give your chapter a name and a colour so it's easy to recognise.</p>
     <input type="text" id="modalInput" placeholder="e.g. Chapter 2 — Literature Review" />
+    <div class="mlabel">Colour</div>
     <div class="modal-swatches" id="modalSwatches"></div>
+    <div id="tplWrap">
+      <div class="mlabel">Start from a template</div>
+      <div class="tpl-grid" id="tplGrid"></div>
+    </div>
     <div class="actions">
       <button class="btn ghost" id="modalCancel">Cancel</button>
       <button class="btn primary" id="modalOk">Save</button>
@@ -311,486 +364,491 @@
   </div>
 </div>
 
+<div id="printRoot"></div>
+
 <script>
 "use strict";
 (function(){
-  // ---------- constants ----------
-  const STORAGE_KEY = "dissertationMapping.v2";
+  const STORAGE_KEY = "dissertationMapping.v3";
   const COLORS = ["#7c5cff","#22d3ee","#37d99a","#ffd166","#ff8fab","#ff5c7c","#f79f4b","#8ecae6","#c792ea","#94a3b8"];
-  const NODE_W = 180;
+  const NODE_W = 200;
   const uid = () => Math.random().toString(36).slice(2,9) + Date.now().toString(36).slice(-3);
 
-  // ---------- state ----------
-  let state = load() || seed();
-  let ui = { path:[], colorTarget:null, connectSrc:null, modalCb:null, modalColor:COLORS[0] };
+  // ---- node types + argument-checker prompts ----
+  const TYPES = {
+    idea:     {label:"Idea",         icon:"💡", color:"#7c5cff", prompts:["What is the core point here?","How does this connect to the chapter's argument?"]},
+    claim:    {label:"Claim",        icon:"⚡", color:"#7c5cff", prompts:["What exactly are you claiming?","What evidence backs it up?","What would a critic say against it?","How does it support your thesis?"]},
+    evidence: {label:"Evidence",     icon:"📊", color:"#37d99a", prompts:["What is the source of this evidence?","How strong / reliable is it?","Which claim does it support?","What are its limitations?"]},
+    counter:  {label:"Counter-point",icon:"⚔️", color:"#ff5c7c", prompts:["What is the objection or opposing view?","How do you respond to it?","Does it force you to qualify your claim?"]},
+    gap:      {label:"Gap",          icon:"🕳", color:"#ffd166", prompts:["What is missing in the existing literature?","Why does that gap matter?","How does your work address it?"]},
+    method:   {label:"Method",       icon:"🔬", color:"#22d3ee", prompts:["What did you do (or will you do)?","Why is this the right method?","What are its limitations?"]},
+    source:   {label:"Source",       icon:"📚", color:"#8ecae6", prompts:["What is the full reference?","What is the key takeaway?","How will you use it in the chapter?"]},
+    question: {label:"Question",     icon:"❓", color:"#c792ea", prompts:["What are you trying to find out?","Why does it matter?","What would a good answer look like?"]},
+    todo:     {label:"To-do",        icon:"✅", color:"#f79f4b", prompts:["What needs doing?","What is the next concrete step?"]},
+  };
+  const TYPE_ORDER = ["idea","claim","evidence","counter","gap","method","source","question","todo"];
+
+  // ---- connection relationship styles ----
+  const RELS = {
+    relates:     {label:"Relates to",  color:"#8891c8", dash:"",    arrow:false},
+    leads:       {label:"Leads to",    color:"#22d3ee", dash:"",    arrow:true},
+    supports:    {label:"Supports",    color:"#37d99a", dash:"",    arrow:true},
+    contradicts: {label:"Contradicts", color:"#ff5c7c", dash:"7 6", arrow:true},
+    example:     {label:"Example of",  color:"#ffd166", dash:"2 6", arrow:true},
+    causes:      {label:"Causes",      color:"#c792ea", dash:"",    arrow:true},
+  };
+  const REL_ORDER = ["relates","leads","supports","contradicts","causes","example"];
+
+  // ---- templates ----
+  function mkNode(text,type,x,y){ return {id:uid(),text,type,x,y,color:TYPES[type].color,notes:"",checks:{},collapsed:false,map:null}; }
+  function chain(items){
+    const nodes=[],edges=[]; let y=50,prev=null;
+    items.forEach(([t,type])=>{ const n=mkNode(t,type,90,y); nodes.push(n); if(prev)edges.push({id:uid(),from:prev.id,to:n.id,rel:"leads",label:""}); prev=n; y+=112; });
+    return {nodes,edges};
+  }
+  function hub(center,items){
+    const nodes=[],edges=[]; const c=mkNode(center,"idea",90,40+(items.length-1)*50); nodes.push(c);
+    let y=30; items.forEach(([t,type])=>{ const n=mkNode(t,type,380,y); nodes.push(n); edges.push({id:uid(),from:c.id,to:n.id,rel:"relates",label:""}); y+=100; });
+    return {nodes,edges};
+  }
+  const TEMPLATES = [
+    {key:"blank", name:"Blank canvas", desc:"Start from nothing.", build:()=>({nodes:[],edges:[]})},
+    {key:"intro", name:"Introduction", desc:"Hook → gap → question → contribution → roadmap.", build:()=>chain([["Hook / opening","idea"],["Context & background","idea"],["Problem / gap","gap"],["Research question","question"],["Thesis / contribution","claim"],["Chapter roadmap","idea"]])},
+    {key:"lit",   name:"Literature review", desc:"Themes, the debate, the gap, your position.", build:()=>hub("Literature review",[["Theme 1","idea"],["Theme 2","idea"],["Key debate","counter"],["The gap","gap"],["My positioning","claim"]])},
+    {key:"methods",name:"Methodology", desc:"Approach, design, data, analysis, limits, ethics.", build:()=>hub("Methodology",[["Approach / paradigm","method"],["Research design","method"],["Data & participants","method"],["Procedure","method"],["Analysis","method"],["Limitations","counter"],["Ethics","todo"]])},
+    {key:"empirical",name:"Empirical / results", desc:"Question → data → findings → interpretation.", build:()=>chain([["Research question","question"],["Hypotheses / expectations","claim"],["Data","evidence"],["Key findings","evidence"],["Interpretation","claim"],["Limitations","counter"]])},
+    {key:"argument",name:"Argument / discussion", desc:"Claim, evidence, counters, response, implications.", build:()=>chain([["Central claim","claim"],["Evidence","evidence"],["Counter-arguments","counter"],["Response","claim"],["Implications","idea"]])},
+    {key:"imrad", name:"IMRaD", desc:"Intro, Methods, Results, Discussion.", build:()=>hub("Chapter",[["Introduction","idea"],["Methods","method"],["Results","evidence"],["Discussion","claim"]])},
+  ];
+
+  // ---- state ----
+  let state = migrate(load() || seed());
+  let ui = { path:[], selected:null, connectMode:false, connectSrc:null, inspectId:null, modalCb:null, modalColor:COLORS[0], modalTpl:"blank", showTpl:true };
   let saveTimer=null;
 
   function seed(){
-    const chId = uid();
-    const n1=uid(), n2=uid(), n3=uid();
-    return {
-      version:2,
-      currentChapterId: chId,
-      chapters:[{
-        id:chId, title:"Chapter 1 — Introduction", color:COLORS[0],
-        rq:"", thesis:"", argument:"",
-        map:{
-          pan:{x:120,y:90}, zoom:1,
-          nodes:[
-            {id:n1,text:"Framing / hook",x:60,y:120,color:COLORS[0],map:null},
-            {id:n2,text:"The gap in the field",x:320,y:40,color:COLORS[2],map:null},
-            {id:n3,text:"My contribution",x:320,y:220,color:COLORS[1],map:null},
-          ],
-          edges:[{id:uid(),from:n1,to:n2},{id:uid(),from:n1,to:n3}]
-        }
-      }]
-    };
+    const chId=uid();
+    const t=chain([["Framing / hook","idea"],["The gap in the field","gap"],["Research question","question"],["My contribution","claim"]]);
+    return { version:3, theme:"dark", dys:false, currentChapterId:chId, parking:[],
+      chapters:[{ id:chId, title:"Chapter 1 — Introduction", color:COLORS[0], rq:"", thesis:"", argument:"",
+        map:{ pan:{x:140,y:70}, zoom:1, nodes:t.nodes, edges:t.edges } }] };
   }
 
-  // ---------- persistence ----------
-  function load(){
-    try{ const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return null; const d=JSON.parse(raw); if(!d.chapters) return null; return d; }
-    catch(e){ return null; }
+  // ---- persistence + migration ----
+  function load(){ try{ const raw=localStorage.getItem(STORAGE_KEY)||localStorage.getItem("dissertationMapping.v2"); if(!raw)return null; const d=JSON.parse(raw); return d.chapters?d:null; }catch(e){ return null; } }
+  function migrate(d){
+    if(!d) return d;
+    if(!d.theme) d.theme="dark";
+    if(typeof d.dys!=="boolean") d.dys=false;
+    if(!Array.isArray(d.parking)) d.parking=[];
+    (d.chapters||[]).forEach(ch=>{ ch.rq=ch.rq||""; ch.thesis=ch.thesis||""; ch.argument=ch.argument||""; migrateMap(ch.map); });
+    d.version=3; return d;
   }
-  function save(){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); flashSaved(); }
-    catch(e){ note("⚠ Could not save (storage full or blocked)"); }
+  function migrateMap(m){
+    if(!m) return;
+    m.pan=m.pan||{x:120,y:90}; if(typeof m.zoom!=="number") m.zoom=1;
+    m.nodes=m.nodes||[]; m.edges=m.edges||[];
+    m.nodes.forEach(n=>{ if(!TYPES[n.type]) n.type="idea"; n.notes=n.notes||""; if(!n.checks||typeof n.checks!=="object") n.checks={}; n.collapsed=!!n.collapsed; if(!n.color) n.color=TYPES[n.type].color; migrateMap(n.map); });
+    m.edges.forEach(e=>{ if(!RELS[e.rel]) e.rel="relates"; if(typeof e.label!=="string") e.label=""; });
   }
+  function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); flashSaved(); }catch(e){ note("⚠ Could not save (storage full or blocked)"); } }
   function scheduleSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(save,300); }
   function note(t){ els.saveNote.textContent=t; }
-  function flashSaved(){
-    els.saveNote.textContent="✓ Saved "+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-  }
+  function flashSaved(){ els.saveNote.textContent="✓ Saved "+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
 
-  // ---------- element refs ----------
+  // ---- history (undo/redo) ----
+  let past=[], futur=[], armed=null;
+  const snap=()=>JSON.stringify(state);
+  function beginChange(){ past.push(snap()); if(past.length>80) past.shift(); futur.length=0; updateUndo(); }
+  function armChange(){ armed=snap(); }
+  function commitArmed(){ if(armed!=null){ past.push(armed); if(past.length>80)past.shift(); futur.length=0; armed=null; updateUndo(); } }
+  function undo(){ if(!past.length)return; futur.push(snap()); state=JSON.parse(past.pop()); afterTravel(); }
+  function redo(){ if(!futur.length)return; past.push(snap()); state=JSON.parse(futur.pop()); afterTravel(); }
+  function afterTravel(){ closeDrawers(); if(!chapter()) state.currentChapterId=state.chapters[0].id; ensurePath(); applyTheme(); renderAll(); save(); updateUndo(); }
+  function updateUndo(){ els.undoBtn.disabled=!past.length; els.redoBtn.disabled=!futur.length; }
+
   const $=id=>document.getElementById(id);
   const els={
     app:$("app"), chapterList:$("chapterList"), breadcrumb:$("breadcrumb"),
-    viewport:$("viewport"), edges:$("edges"), nodes:$("nodes"),
-    canvasWrap:$("canvasWrap"), zoomLabel:$("zoomLabel"), emptyState:$("emptyState"),
-    connectHint:$("connectHint"), swatches:$("swatches"), saveNote:$("saveNote"),
+    viewport:$("viewport"), edges:$("edges"), nodes:$("nodes"), canvasWrap:$("canvasWrap"),
+    zoomLabel:$("zoomLabel"), emptyState:$("emptyState"), connectHint:$("connectHint"),
+    swatchPop:$("swatchPop"), swatchGrid:$("swatchGrid"), edgePop:$("edgePop"), saveNote:$("saveNote"),
     argbar:$("argbar"), fieldRQ:$("fieldRQ"), fieldThesis:$("fieldThesis"), fieldArgument:$("fieldArgument"),
-    tbConnect:$("tbConnect"),
-    overlay:$("overlay"), modalTitle:$("modalTitle"), modalDesc:$("modalDesc"),
-    modalInput:$("modalInput"), modalSwatches:$("modalSwatches"),
-    importFile:$("importFile"),
+    tbConnect:$("tbConnect"), undoBtn:$("undoBtn"), redoBtn:$("redoBtn"),
+    inspector:$("inspector"), inspBody:$("inspBody"), parking:$("parking"), parkList:$("parkList"), parkText:$("parkText"),
+    overlay:$("overlay"), modalTitle:$("modalTitle"), modalDesc:$("modalDesc"), modalInput:$("modalInput"),
+    modalSwatches:$("modalSwatches"), tplWrap:$("tplWrap"), tplGrid:$("tplGrid"), importFile:$("importFile"),
+    themeBtn:$("themeBtn"), dysBtn:$("dysBtn"), printRoot:$("printRoot"),
   };
 
-  // ---------- model helpers ----------
+  // ---- model helpers ----
   function chapter(){ return state.chapters.find(c=>c.id===state.currentChapterId) || state.chapters[0]; }
   function currentMap(){
-    let map = chapter().map;
-    for(const nid of ui.path){
-      const n = map.nodes.find(x=>x.id===nid);
-      if(!n){ ui.path=[]; return chapter().map; }
-      if(!n.map) n.map={pan:{x:100,y:80},zoom:1,nodes:[],edges:[]};
-      map = n.map;
-    }
+    let map=chapter().map;
+    for(const nid of ui.path){ const n=map.nodes.find(x=>x.id===nid); if(!n){ ui.path=[]; return chapter().map; } if(!n.map) n.map={pan:{x:100,y:80},zoom:1,nodes:[],edges:[]}; map=n.map; }
     return map;
   }
-  function nodeById(id){ return currentMap().nodes.find(n=>n.id===id); }
+  function ensurePath(){ let map=chapter().map; const p=[]; for(const nid of ui.path){ const n=map.nodes.find(x=>x.id===nid); if(!n)break; p.push(nid); map=n.map||{nodes:[],edges:[]}; } ui.path=p; }
 
-  // ---------- rendering: sidebar ----------
+  // hidden set from collapsed nodes (directed by edges from->to)
+  function computeHidden(map){
+    const collapsed=new Set(map.nodes.filter(n=>n.collapsed).map(n=>n.id));
+    if(!collapsed.size) return {hidden:new Set(), desc:{}};
+    const children={}; map.nodes.forEach(n=>children[n.id]=[]);
+    map.edges.forEach(e=>{ if(children[e.from]) children[e.from].push(e.to); });
+    const indeg={}; map.nodes.forEach(n=>indeg[n.id]=0);
+    map.edges.forEach(e=>{ if(indeg[e.to]!=null) indeg[e.to]++; });
+    let roots=map.nodes.filter(n=>indeg[n.id]===0).map(n=>n.id);
+    if(!roots.length) roots=map.nodes.map(n=>n.id);
+    const visible=new Set(), stack=[...roots];
+    while(stack.length){ const id=stack.pop(); if(visible.has(id))continue; visible.add(id); if(collapsed.has(id))continue; (children[id]||[]).forEach(c=>{ if(!visible.has(c)) stack.push(c); }); }
+    const hidden=new Set(); map.nodes.forEach(n=>{ if(!visible.has(n.id)) hidden.add(n.id); });
+    // descendant counts for collapsed nodes
+    const desc={};
+    collapsed.forEach(id=>{ const seen=new Set(),st=[...(children[id]||[])]; while(st.length){ const c=st.pop(); if(seen.has(c))continue; seen.add(c); (children[c]||[]).forEach(x=>st.push(x)); } desc[id]=seen.size; });
+    return {hidden,desc};
+  }
+  function hasChildren(map,id){ return map.edges.some(e=>e.from===id); }
+  function answeredCount(n){ const c=n.checks[n.type]||{}; const total=TYPES[n.type].prompts.length; let a=0; for(let i=0;i<total;i++){ if((c[i]||"").trim()) a++; } return {a,total}; }
+
+  // ---- sidebar ----
   function renderChapters(){
     els.chapterList.innerHTML="";
     state.chapters.forEach(ch=>{
       const div=document.createElement("div");
       div.className="chapter-item"+(ch.id===state.currentChapterId?" active":"");
-      div.innerHTML=`<span class="dot" style="background:${ch.color}"></span>
-        <span class="name">${escapeHtml(ch.title)}</span>
-        <span class="count">${ch.map.nodes.length}</span>`;
-      div.onclick=()=>{ if(ch.id!==state.currentChapterId){ state.currentChapterId=ch.id; ui.path=[]; renderAll(); scheduleSave(); } };
+      div.innerHTML=`<span class="dot" style="background:${ch.color}"></span><span class="name">${escapeHtml(ch.title)}</span><span class="count">${ch.map.nodes.length}</span>`;
+      div.onclick=()=>{ if(ch.id!==state.currentChapterId){ state.currentChapterId=ch.id; ui.path=[]; ui.selected=null; closeDrawers(); renderAll(); scheduleSave(); } };
       els.chapterList.appendChild(div);
     });
   }
 
-  // ---------- rendering: breadcrumb ----------
   function renderBreadcrumb(){
     els.breadcrumb.innerHTML="";
-    const crumbs=[{label:chapter().title, depth:-1}];
-    let map=chapter().map;
-    ui.path.forEach((nid,i)=>{
-      const n=map.nodes.find(x=>x.id===nid);
-      crumbs.push({label:(n&&n.text)?n.text:"(untitled)", depth:i});
-      map=n&&n.map?n.map:{nodes:[]};
-    });
+    const crumbs=[{label:chapter().title, depth:-1}]; let map=chapter().map;
+    ui.path.forEach((nid,i)=>{ const n=map.nodes.find(x=>x.id===nid); crumbs.push({label:(n&&n.text)?n.text:"(untitled)", depth:i}); map=n&&n.map?n.map:{nodes:[]}; });
     crumbs.forEach((c,i)=>{
       if(i>0){ const s=document.createElement("span"); s.className="crumb-sep"; s.textContent="›"; els.breadcrumb.appendChild(s); }
-      const el=document.createElement("span");
-      el.className="crumb"+(i===crumbs.length-1?" current":"");
-      el.textContent=c.label||"(untitled)";
-      if(i<crumbs.length-1){ el.onclick=()=>{ ui.path=ui.path.slice(0,c.depth+1); renderAll(); }; }
+      const el=document.createElement("span"); el.className="crumb"+(i===crumbs.length-1?" current":""); el.textContent=c.label||"(untitled)";
+      if(i<crumbs.length-1) el.onclick=()=>{ ui.path=ui.path.slice(0,c.depth+1); ui.selected=null; closeDrawers(); renderAll(); };
       els.breadcrumb.appendChild(el);
     });
   }
 
-  // ---------- rendering: argument fields ----------
   function renderArg(){
     const ch=chapter();
-    els.fieldRQ.value=ch.rq||"";
-    els.fieldThesis.value=ch.thesis||"";
-    els.fieldArgument.value=ch.argument||"";
-    const filled=[ch.rq,ch.thesis,ch.argument].filter(x=>x&&x.trim()).length;
-    $("argHint").textContent = filled? `${filled}/3 written` : "Click to write your through-line";
+    els.fieldRQ.value=ch.rq||""; els.fieldThesis.value=ch.thesis||""; els.fieldArgument.value=ch.argument||"";
+    renderArgHint();
   }
+  function renderArgHint(){ const ch=chapter(); const f=[ch.rq,ch.thesis,ch.argument].filter(x=>x&&x.trim()).length; $("argHint").textContent=f?`${f}/3 written`:"Click to write your through-line"; }
 
-  // ---------- rendering: map ----------
+  // ---- map ----
   function renderMap(){
-    const map=currentMap();
     applyTransform();
-    // nodes
+    const map=currentMap();
+    const {hidden,desc}=computeHidden(map);
     els.nodes.innerHTML="";
-    map.nodes.forEach(n=>els.nodes.appendChild(buildNode(n)));
-    renderEdges();
-    els.emptyState.style.display = map.nodes.length? "none":"grid";
+    map.nodes.forEach(n=>{ if(!hidden.has(n.id)) els.nodes.appendChild(buildNode(n,map,desc)); });
+    renderEdges(hidden);
+    els.emptyState.style.display=map.nodes.length?"none":"grid";
   }
 
-  function buildNode(n){
+  function buildNode(n,map,desc){
     const el=document.createElement("div");
     el.className="node"+(ui.selected===n.id?" selected":"")+(ui.connectSrc===n.id?" connect-src":"");
-    el.style.left=n.x+"px"; el.style.top=n.y+"px";
-    el.dataset.id=n.id;
-    const hasSub = n.map && n.map.nodes && n.map.nodes.length;
+    el.style.left=n.x+"px"; el.style.top=n.y+"px"; el.dataset.id=n.id;
+    const t=TYPES[n.type]; const {a,total}=answeredCount(n);
+    const hasSub=n.map&&n.map.nodes&&n.map.nodes.length;
+    const kids=hasChildren(map,n.id);
+    const chkClass=a>0?"mini has":"mini";
     el.innerHTML=`
       <div class="accent" style="background:${n.color}"></div>
-      <div class="body">
-        <div class="txt" contenteditable="true" spellcheck="true">${escapeHtml(n.text)}</div>
-      </div>
+      <div class="body"><div class="txt" contenteditable="true" spellcheck="true">${escapeHtml(n.text)}</div></div>
       <div class="foot">
-        <span class="submap-badge ${hasSub?'':'empty'}" data-sub>${hasSub?'⤢ Sub-map ('+n.map.nodes.length+')':'⤢ Open sub-map'}</span>
-        <span class="btn tiny ghost" data-color style="padding:3px 7px;font-size:12px">🎨</span>
+        <span class="type-pill" data-inspect style="color:${t.color};background:${hexA(t.color,.14)};border-color:${hexA(t.color,.4)}">${t.icon} ${t.label}</span>
+        <div class="foot-icons">
+          <button class="${chkClass}" data-inspect title="Argument prompts (${a}/${total} answered)">✎${a>0?` ${a}/${total}`:""}</button>
+          <button class="mini ${hasSub?'has':''}" data-sub title="Sub-map">⤢${hasSub?`<sup>${n.map.nodes.length}</sup>`:""}</button>
+          <button class="mini" data-color title="Colour">🎨</button>
+        </div>
       </div>
+      ${kids?`<button class="collapse" data-collapse title="${n.collapsed?'Expand':'Collapse'} branch">${n.collapsed?'＋':'－'}${n.collapsed&&desc[n.id]?`<span class="cc">${desc[n.id]}</span>`:""}</button>`:""}
       <div class="nub" data-nub></div>`;
     wireNode(el,n);
     return el;
   }
 
-  function renderEdges(){
-    const map=currentMap();
-    const svg=els.edges;
-    svg.innerHTML="";
+  function renderEdges(hidden){
+    const map=currentMap(); const svg=els.edges;
+    // defs with one arrow marker per rel colour
+    let defs='<defs>';
+    REL_ORDER.forEach(k=>{ const c=RELS[k].color; defs+=`<marker id="ar-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`; });
+    defs+='</defs>';
+    let html=defs;
     map.edges.forEach(e=>{
-      const a=map.nodes.find(n=>n.id===e.from), b=map.nodes.find(n=>n.id===e.to);
-      if(!a||!b) return;
-      const ax=a.x+NODE_W, ay=a.y+34, bx=b.x, by=b.y+34;
-      const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+      if(hidden.has(e.from)||hidden.has(e.to)) return;
+      const a=map.nodes.find(n=>n.id===e.from), b=map.nodes.find(n=>n.id===e.to); if(!a||!b) return;
+      const ax=a.x+NODE_W, ay=a.y+44, bx=b.x, by=b.y+44;
       const dx=Math.max(40,Math.abs(bx-ax)*0.5);
-      p.setAttribute("d",`M ${ax} ${ay} C ${ax+dx} ${ay}, ${bx-dx} ${by}, ${bx} ${by}`);
-      p.dataset.edge=e.id;
-      p.style.pointerEvents="stroke"; p.style.cursor="pointer";
-      p.addEventListener("click",()=>{ if(confirm("Remove this connection?")){ map.edges=map.edges.filter(x=>x.id!==e.id); renderMap(); renderChapters(); scheduleSave(); } });
-      svg.appendChild(p);
+      const d=`M ${ax} ${ay} C ${ax+dx} ${ay}, ${bx-dx} ${by}, ${bx} ${by}`;
+      const rel=RELS[e.rel]||RELS.relates;
+      const dash=rel.dash?`stroke-dasharray="${rel.dash}"`:"";
+      const marker=rel.arrow?`marker-end="url(#ar-${e.rel})"`:"";
+      html+=`<path class="wire" d="${d}" stroke="${rel.color}" ${dash} ${marker}/>`;
+      html+=`<path class="hit" d="${d}" data-edge="${e.id}"/>`;
+      const label=e.label||"";
+      if(label){ const mx=(ax+bx)/2, my=(ay+by)/2-2; html+=`<text x="${mx}" y="${my}" text-anchor="middle" fill="${rel.color}">${escapeHtml(label)}</text>`; }
     });
+    svg.innerHTML=html;
+    svg.querySelectorAll("path.hit").forEach(p=>{ p.addEventListener("click",ev=>{ ev.stopPropagation(); openEdgePop(p.dataset.edge, ev.clientX, ev.clientY); }); });
   }
 
-  function applyTransform(){
-    const m=currentMap();
-    els.viewport.style.transform=`translate(${m.pan.x}px, ${m.pan.y}px) scale(${m.zoom})`;
-    els.zoomLabel.textContent=Math.round(m.zoom*100)+"%";
-  }
+  function applyTransform(){ const m=currentMap(); els.viewport.style.transform=`translate(${m.pan.x}px, ${m.pan.y}px) scale(${m.zoom})`; els.zoomLabel.textContent=Math.round(m.zoom*100)+"%"; }
 
-  // ---------- node interaction ----------
+  // ---- node interaction ----
   function wireNode(el,n){
     const txt=el.querySelector(".txt");
-    const map=currentMap();
+    txt.addEventListener("focus",()=>{ ui.selected=n.id; armChange(); });
+    txt.addEventListener("input",()=>{ commitArmed(); n.text=txt.innerText; scheduleSave(); });
+    txt.addEventListener("blur",()=>{ n.text=txt.innerText.trim(); renderChapters(); renderBreadcrumb(); if(ui.inspectId===n.id) renderInspector(); scheduleSave(); });
+    txt.addEventListener("keydown",ev=>{ if(ev.key==="Enter"&&!ev.shiftKey){ ev.preventDefault(); txt.blur(); } ev.stopPropagation(); });
+    txt.addEventListener("pointerdown",ev=>ev.stopPropagation());
 
-    // editing text
-    txt.addEventListener("focus",()=>{ ui.selected=n.id; });
-    txt.addEventListener("input",()=>{ n.text=txt.innerText; scheduleSave(); });
-    txt.addEventListener("blur",()=>{ n.text=txt.innerText.trim(); renderChapters(); renderBreadcrumb(); scheduleSave(); });
-    txt.addEventListener("keydown",ev=>{
-      if(ev.key==="Enter"&&!ev.shiftKey){ ev.preventDefault(); txt.blur(); }
-      ev.stopPropagation();
-    });
-    txt.addEventListener("pointerdown",ev=>ev.stopPropagation()); // don't drag while editing
+    el.querySelectorAll("[data-inspect]").forEach(b=>b.addEventListener("click",ev=>{ ev.stopPropagation(); openInspector(n.id); }));
+    el.querySelector("[data-sub]").addEventListener("click",ev=>{ ev.stopPropagation(); if(!n.map) n.map={pan:{x:100,y:80},zoom:1,nodes:[],edges:[]}; ui.path=[...ui.path,n.id]; ui.selected=null; ui.connectSrc=null; setConnect(false); closeDrawers(); renderAll(); scheduleSave(); });
+    el.querySelector("[data-color]").addEventListener("click",ev=>{ ev.stopPropagation(); openSwatches(ev.currentTarget,c=>{ beginChange(); n.color=c; renderMap(); scheduleSave(); }, n.color); });
+    const coll=el.querySelector("[data-collapse]");
+    if(coll) coll.addEventListener("click",ev=>{ ev.stopPropagation(); beginChange(); n.collapsed=!n.collapsed; renderMap(); scheduleSave(); });
+    el.querySelector("[data-nub]").addEventListener("pointerdown",ev=>{ ev.stopPropagation(); startNubDrag(n,ev); });
 
-    // sub-map
-    el.querySelector("[data-sub]").addEventListener("click",ev=>{
-      ev.stopPropagation();
-      if(!n.map) n.map={pan:{x:100,y:80},zoom:1,nodes:[],edges:[]};
-      ui.path=[...ui.path,n.id]; ui.selected=null; ui.connectSrc=null; setConnect(false);
-      renderAll(); scheduleSave();
-    });
-    // color
-    el.querySelector("[data-color]").addEventListener("click",ev=>{
-      ev.stopPropagation(); openSwatches(ev.currentTarget,c=>{ n.color=c; renderMap(); scheduleSave(); }, n.color);
-    });
-
-    // connect via nub
-    const nub=el.querySelector("[data-nub]");
-    nub.addEventListener("pointerdown",ev=>{ ev.stopPropagation(); startNubDrag(n,ev); });
-
-    // drag node / select / connect click
     el.addEventListener("pointerdown",ev=>{
-      if(ev.target.closest(".txt")||ev.target.closest("[data-sub]")||ev.target.closest("[data-color]")||ev.target.closest("[data-nub]")) return;
+      if(ev.target.closest(".txt")||ev.target.closest("[data-sub]")||ev.target.closest("[data-color]")||ev.target.closest("[data-inspect]")||ev.target.closest("[data-collapse]")||ev.target.closest("[data-nub]")) return;
       if(ui.connectMode){ handleConnectClick(n); return; }
-      ui.selected=n.id; highlightSelection();
-      startNodeDrag(el,n,ev);
+      ui.selected=n.id; highlightSelection(); startNodeDrag(el,n,ev);
     });
   }
 
   function startNodeDrag(el,n,ev){
-    const m=currentMap();
-    const startX=ev.clientX, startY=ev.clientY, ox=n.x, oy=n.y;
-    let moved=false;
+    const m=currentMap(); const sx=ev.clientX, sy=ev.clientY, ox=n.x, oy=n.y; let moved=false; armChange();
     el.setPointerCapture(ev.pointerId);
-    function move(e){
-      const dx=(e.clientX-startX)/m.zoom, dy=(e.clientY-startY)/m.zoom;
-      if(Math.abs(dx)+Math.abs(dy)>2) moved=true;
-      n.x=ox+dx; n.y=oy+dy;
-      el.style.left=n.x+"px"; el.style.top=n.y+"px";
-      renderEdges();
-    }
-    function up(e){
-      el.releasePointerCapture(ev.pointerId);
-      el.removeEventListener("pointermove",move); el.removeEventListener("pointerup",up);
-      if(moved) scheduleSave();
-    }
+    function move(e){ const dx=(e.clientX-sx)/m.zoom, dy=(e.clientY-sy)/m.zoom; if(!moved&&Math.abs(dx)+Math.abs(dy)>2){ moved=true; commitArmed(); } n.x=ox+dx; n.y=oy+dy; el.style.left=n.x+"px"; el.style.top=n.y+"px"; renderEdges(computeHidden(m).hidden); }
+    function up(){ el.releasePointerCapture(ev.pointerId); el.removeEventListener("pointermove",move); el.removeEventListener("pointerup",up); if(moved) scheduleSave(); else armed=null; }
     el.addEventListener("pointermove",move); el.addEventListener("pointerup",up);
   }
 
-  // drag a fresh connection out of the nub
   function startNubDrag(n,ev){
-    const m=currentMap();
-    setConnect(false);
-    const temp=document.createElementNS("http://www.w3.org/2000/svg","path");
-    temp.setAttribute("class","temp"); els.edges.appendChild(temp);
-    const ax=n.x+NODE_W, ay=n.y+34;
-    function pt(e){
-      const r=els.viewport.getBoundingClientRect();
-      return {x:(e.clientX-r.left)/m.zoom, y:(e.clientY-r.top)/m.zoom};
-    }
-    function move(e){
-      const p=pt(e);
-      const dx=Math.max(40,Math.abs(p.x-ax)*0.5);
-      temp.setAttribute("d",`M ${ax} ${ay} C ${ax+dx} ${ay}, ${p.x-dx} ${p.y}, ${p.x} ${p.y}`);
-    }
+    const m=currentMap(); setConnect(false);
+    const temp=document.createElementNS("http://www.w3.org/2000/svg","path"); temp.setAttribute("class","temp"); els.edges.appendChild(temp);
+    const ax=n.x+NODE_W, ay=n.y+44;
+    const pt=e=>{ const r=els.viewport.getBoundingClientRect(); return {x:(e.clientX-r.left)/m.zoom, y:(e.clientY-r.top)/m.zoom}; };
+    function move(e){ const p=pt(e); const dx=Math.max(40,Math.abs(p.x-ax)*0.5); temp.setAttribute("d",`M ${ax} ${ay} C ${ax+dx} ${ay}, ${p.x-dx} ${p.y}, ${p.x} ${p.y}`); }
     function up(e){
-      window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up);
-      temp.remove();
-      const target=document.elementFromPoint(e.clientX,e.clientY);
-      const nodeEl=target&&target.closest(".node");
-      if(nodeEl&&nodeEl.dataset.id!==n.id){
-        addEdge(n.id,nodeEl.dataset.id);
-      } else if(!nodeEl){
-        // drop on empty canvas -> create a connected node there
-        const p=pt(e);
-        const nn={id:uid(),text:"",x:p.x-NODE_W/2,y:p.y-30,color:n.color,map:null};
-        currentMap().nodes.push(nn); addEdge(n.id,nn.id,true);
-        renderMap(); focusNode(nn.id);
-      }
-      renderChapters(); scheduleSave();
+      window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); temp.remove();
+      const target=document.elementFromPoint(e.clientX,e.clientY); const nodeEl=target&&target.closest(".node");
+      if(nodeEl&&nodeEl.dataset.id!==n.id){ beginChange(); addEdge(n.id,nodeEl.dataset.id); renderMap(); renderChapters(); scheduleSave(); }
+      else if(!nodeEl){ beginChange(); const p=pt(e); const nn=mkNode("","idea",p.x-NODE_W/2,p.y-30); nn.color=chapter().color; currentMap().nodes.push(nn); addEdge(n.id,nn.id); renderMap(); renderChapters(); focusNode(nn.id); scheduleSave(); }
     }
     window.addEventListener("pointermove",move); window.addEventListener("pointerup",up);
   }
 
-  function addEdge(from,to,silent){
-    const m=currentMap();
-    if(from===to) return;
-    if(m.edges.some(e=>(e.from===from&&e.to===to)||(e.from===to&&e.to===from))) return;
-    m.edges.push({id:uid(),from,to});
-    if(!silent){ renderEdges(); scheduleSave(); }
-  }
+  function addEdge(from,to){ const m=currentMap(); if(from===to)return; if(m.edges.some(e=>(e.from===from&&e.to===to)||(e.from===to&&e.to===from)))return; m.edges.push({id:uid(),from,to,rel:"relates",label:""}); }
 
-  // ---------- connect mode ----------
-  function setConnect(on){
-    ui.connectMode=on; ui.connectSrc=null;
-    els.tbConnect.classList.toggle("on",on);
-    els.canvasWrap.classList.toggle("connect",on);
-    els.connectHint.classList.toggle("show",on);
-    highlightSelection();
-  }
+  // ---- connect mode ----
+  function setConnect(on){ ui.connectMode=on; ui.connectSrc=null; els.tbConnect.classList.toggle("on",on); els.canvasWrap.classList.toggle("connect",on); els.connectHint.classList.toggle("show",on); highlightSelection(); }
   function handleConnectClick(n){
     if(!ui.connectSrc){ ui.connectSrc=n.id; highlightSelection(); return; }
     if(ui.connectSrc===n.id){ ui.connectSrc=null; highlightSelection(); return; }
-    addEdge(ui.connectSrc,n.id); ui.connectSrc=null; renderMap(); renderChapters();
+    beginChange(); addEdge(ui.connectSrc,n.id); ui.connectSrc=null; renderMap(); renderChapters(); scheduleSave();
   }
-  function highlightSelection(){
-    els.nodes.querySelectorAll(".node").forEach(el=>{
-      el.classList.toggle("selected",el.dataset.id===ui.selected);
-      el.classList.toggle("connect-src",el.dataset.id===ui.connectSrc);
-    });
-  }
+  function highlightSelection(){ els.nodes.querySelectorAll(".node").forEach(el=>{ el.classList.toggle("selected",el.dataset.id===ui.selected); el.classList.toggle("connect-src",el.dataset.id===ui.connectSrc); }); }
 
-  // ---------- add / delete nodes ----------
+  // ---- add / delete ----
   function addNode(cx,cy){
-    const m=currentMap();
-    let x,y;
-    if(cx==null){
-      // center of viewport
-      const r=els.canvasWrap.getBoundingClientRect();
-      x=(r.width/2-m.pan.x)/m.zoom-NODE_W/2; y=(r.height/2-m.pan.y)/m.zoom-30;
-    } else { x=cx; y=cy; }
-    const n={id:uid(),text:"",x,y,color:chapter().color,map:null};
-    m.nodes.push(n); renderMap(); renderChapters(); focusNode(n.id); scheduleSave();
+    beginChange(); const m=currentMap(); let x,y;
+    if(cx==null){ const r=els.canvasWrap.getBoundingClientRect(); x=(r.width/2-m.pan.x)/m.zoom-NODE_W/2; y=(r.height/2-m.pan.y)/m.zoom-30; } else { x=cx; y=cy; }
+    const n=mkNode("","idea",x,y); n.color=chapter().color; m.nodes.push(n); renderMap(); renderChapters(); focusNode(n.id); scheduleSave();
   }
-  function focusNode(id){
-    requestAnimationFrame(()=>{
-      const el=els.nodes.querySelector(`.node[data-id="${id}"] .txt`);
-      if(el){ el.focus(); const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
-    });
-  }
+  function focusNode(id){ requestAnimationFrame(()=>{ const el=els.nodes.querySelector(`.node[data-id="${id}"] .txt`); if(el){ el.focus(); const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); } }); }
   function deleteSelected(){
-    if(!ui.selected) return;
-    const m=currentMap();
-    const n=m.nodes.find(x=>x.id===ui.selected);
-    if(n&&n.map&&n.map.nodes&&n.map.nodes.length){
-      if(!confirm("This node has a sub-map with "+n.map.nodes.length+" node(s). Delete it and everything inside?")) return;
-    }
-    m.nodes=m.nodes.filter(x=>x.id!==ui.selected);
-    m.edges=m.edges.filter(e=>e.from!==ui.selected&&e.to!==ui.selected);
-    ui.selected=null; renderMap(); renderChapters(); scheduleSave();
+    if(!ui.selected)return; const m=currentMap(); const n=m.nodes.find(x=>x.id===ui.selected);
+    if(n&&n.map&&n.map.nodes&&n.map.nodes.length){ if(!confirm("This node has a sub-map with "+n.map.nodes.length+" node(s). Delete it and everything inside?")) return; }
+    beginChange(); m.nodes=m.nodes.filter(x=>x.id!==ui.selected); m.edges=m.edges.filter(e=>e.from!==ui.selected&&e.to!==ui.selected);
+    if(ui.inspectId===ui.selected) closeDrawers(); ui.selected=null; renderMap(); renderChapters(); scheduleSave();
   }
 
-  // ---------- pan & zoom ----------
+  // ---- pan & zoom ----
   function wirePanZoom(){
     let panning=false,sx,sy,px,py;
     els.canvasWrap.addEventListener("pointerdown",ev=>{
-      if(ev.target.closest(".node")||ev.target.closest(".toolbar")||ev.target.closest(".empty-state")) return;
-      if(ui.connectMode){ ui.connectSrc=null; highlightSelection(); }
-      ui.selected=null; highlightSelection();
-      const m=currentMap();
-      panning=true; sx=ev.clientX; sy=ev.clientY; px=m.pan.x; py=m.pan.y;
-      els.canvasWrap.classList.add("panning"); els.canvasWrap.setPointerCapture(ev.pointerId);
+      if(ev.target.closest(".node")||ev.target.closest(".toolbar")||ev.target.closest(".empty-state")||ev.target.closest(".drawer")) return;
+      if(ui.connectMode){ ui.connectSrc=null; } ui.selected=null; highlightSelection();
+      const m=currentMap(); panning=true; sx=ev.clientX; sy=ev.clientY; px=m.pan.x; py=m.pan.y; els.canvasWrap.classList.add("panning"); els.canvasWrap.setPointerCapture(ev.pointerId);
     });
-    els.canvasWrap.addEventListener("pointermove",ev=>{
-      if(!panning) return;
-      const m=currentMap();
-      m.pan.x=px+(ev.clientX-sx); m.pan.y=py+(ev.clientY-sy); applyTransform();
-    });
-    els.canvasWrap.addEventListener("pointerup",ev=>{ if(panning){ panning=false; els.canvasWrap.classList.remove("panning"); scheduleSave(); }});
-    els.canvasWrap.addEventListener("dblclick",ev=>{
-      if(ev.target.closest(".node")||ev.target.closest(".toolbar")) return;
-      const m=currentMap(), r=els.viewport.getBoundingClientRect();
-      addNode((ev.clientX-r.left)/m.zoom-NODE_W/2,(ev.clientY-r.top)/m.zoom-30);
-    });
-    els.canvasWrap.addEventListener("wheel",ev=>{
-      ev.preventDefault();
-      const m=currentMap();
-      const r=els.canvasWrap.getBoundingClientRect();
-      const mx=ev.clientX-r.left, my=ev.clientY-r.top;
-      const factor=ev.deltaY<0?1.1:1/1.1;
-      zoomAt(mx,my,factor);
-    },{passive:false});
+    els.canvasWrap.addEventListener("pointermove",ev=>{ if(!panning)return; const m=currentMap(); m.pan.x=px+(ev.clientX-sx); m.pan.y=py+(ev.clientY-sy); applyTransform(); });
+    els.canvasWrap.addEventListener("pointerup",ev=>{ if(panning){ panning=false; els.canvasWrap.classList.remove("panning"); scheduleSave(); } });
+    els.canvasWrap.addEventListener("dblclick",ev=>{ if(ev.target.closest(".node")||ev.target.closest(".toolbar")||ev.target.closest(".drawer"))return; const m=currentMap(),r=els.viewport.getBoundingClientRect(); addNode((ev.clientX-r.left)/m.zoom-NODE_W/2,(ev.clientY-r.top)/m.zoom-30); });
+    els.canvasWrap.addEventListener("wheel",ev=>{ ev.preventDefault(); const r=els.canvasWrap.getBoundingClientRect(); zoomAt(ev.clientX-r.left, ev.clientY-r.top, ev.deltaY<0?1.1:1/1.1); },{passive:false});
   }
-  function zoomAt(mx,my,factor){
-    const m=currentMap();
-    const nz=Math.min(2.2,Math.max(0.25,m.zoom*factor));
-    const wx=(mx-m.pan.x)/m.zoom, wy=(my-m.pan.y)/m.zoom;
-    m.zoom=nz; m.pan.x=mx-wx*nz; m.pan.y=my-wy*nz;
-    applyTransform(); scheduleSave();
-  }
+  function zoomAt(mx,my,factor){ const m=currentMap(); const nz=Math.min(2.2,Math.max(0.25,m.zoom*factor)); const wx=(mx-m.pan.x)/m.zoom, wy=(my-m.pan.y)/m.zoom; m.zoom=nz; m.pan.x=mx-wx*nz; m.pan.y=my-wy*nz; applyTransform(); scheduleSave(); }
   function zoomButton(f){ const r=els.canvasWrap.getBoundingClientRect(); zoomAt(r.width/2,r.height/2,f); }
   function fitMap(){
-    const m=currentMap();
-    if(!m.nodes.length){ m.zoom=1; m.pan={x:120,y:90}; applyTransform(); scheduleSave(); return; }
+    const m=currentMap(); if(!m.nodes.length){ m.zoom=1; m.pan={x:140,y:70}; applyTransform(); scheduleSave(); return; }
     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
-    m.nodes.forEach(n=>{ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+NODE_W); maxY=Math.max(maxY,n.y+120); });
-    const r=els.canvasWrap.getBoundingClientRect();
-    const pad=80;
-    const zx=(r.width-pad*2)/(maxX-minX), zy=(r.height-pad*2)/(maxY-minY);
-    const z=Math.min(2,Math.max(0.3,Math.min(zx,zy)));
-    m.zoom=z;
-    m.pan.x=(r.width-(maxX-minX)*z)/2-minX*z;
-    m.pan.y=(r.height-(maxY-minY)*z)/2-minY*z;
-    applyTransform(); scheduleSave();
+    m.nodes.forEach(n=>{ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+NODE_W); maxY=Math.max(maxY,n.y+130); });
+    const r=els.canvasWrap.getBoundingClientRect(), pad=80;
+    const z=Math.min(2,Math.max(0.3,Math.min((r.width-pad*2)/(maxX-minX),(r.height-pad*2)/(maxY-minY))));
+    m.zoom=z; m.pan.x=(r.width-(maxX-minX)*z)/2-minX*z; m.pan.y=(r.height-(maxY-minY)*z)/2-minY*z; applyTransform(); scheduleSave();
   }
 
-  // ---------- swatches popover ----------
-  function buildSwatches(container,cb,current){
-    container.innerHTML="";
-    COLORS.forEach(c=>{
-      const s=document.createElement("div");
-      s.className="swatch"+(c===current?" sel":""); s.style.background=c;
-      s.onclick=()=>{ cb(c); closeSwatches(); };
-      container.appendChild(s);
+  // ---- swatches ----
+  function buildSwatchGrid(container,cb,current){ container.innerHTML=""; COLORS.forEach(c=>{ const s=document.createElement("div"); s.className="swatch"+(c===current?" sel":""); s.style.background=c; s.onclick=()=>{ cb(c); closeSwatches(); }; container.appendChild(s); }); }
+  function openSwatches(anchor,cb,current){ buildSwatchGrid(els.swatchGrid,cb,current); const r=anchor.getBoundingClientRect(); place(els.swatchPop,r); els.swatchPop.classList.add("show"); }
+  function closeSwatches(){ els.swatchPop.classList.remove("show"); }
+
+  // ---- edge popover ----
+  function openEdgePop(edgeId,cx,cy){
+    const m=currentMap(); const e=m.edges.find(x=>x.id===edgeId); if(!e)return;
+    let html='<div class="pop-title">Connection type</div><div class="rel-list">';
+    REL_ORDER.forEach(k=>{ const r=RELS[k]; html+=`<div class="rel-opt${e.rel===k?' sel':''}" data-rel="${k}"><span class="rel-line" style="border-top-color:${r.color};border-top-style:${r.dash?'dashed':'solid'}"></span>${r.label}</div>`; });
+    html+='</div><input class="rel-input" id="relLabel" placeholder="Optional label…" maxlength="40"/><button class="btn danger tiny pop-del" id="edgeDel">🗑 Remove connection</button>';
+    els.edgePop.innerHTML=html;
+    els.edgePop.querySelector("#relLabel").value=e.label||"";
+    els.edgePop.querySelectorAll("[data-rel]").forEach(o=>o.addEventListener("click",()=>{ beginChange(); e.rel=o.dataset.rel; renderEdges(computeHidden(m).hidden); els.edgePop.querySelectorAll("[data-rel]").forEach(x=>x.classList.toggle("sel",x===o)); scheduleSave(); }));
+    const inp=els.edgePop.querySelector("#relLabel");
+    inp.addEventListener("focus",armChange);
+    inp.addEventListener("input",()=>{ commitArmed(); e.label=inp.value; renderEdges(computeHidden(m).hidden); scheduleSave(); });
+    els.edgePop.querySelector("#edgeDel").addEventListener("click",()=>{ beginChange(); m.edges=m.edges.filter(x=>x.id!==edgeId); closeEdgePop(); renderMap(); scheduleSave(); });
+    place(els.edgePop,{left:cx,right:cx,bottom:cy}); els.edgePop.classList.add("show");
+  }
+  function closeEdgePop(){ els.edgePop.classList.remove("show"); }
+  function place(pop,r){ pop.style.left=Math.min(window.innerWidth-230,Math.max(8,r.left))+"px"; pop.style.top=Math.min(window.innerHeight-60,(r.bottom+6))+"px"; }
+  document.addEventListener("pointerdown",e=>{ if(!e.target.closest(".pop")&&!e.target.closest("[data-color]")&&!e.target.closest("path.hit")) { closeSwatches(); closeEdgePop(); } });
+
+  // ---- inspector (argument checker) ----
+  function openInspector(id){ ui.inspectId=id; ui.selected=id; highlightSelection(); els.parking.classList.remove("show"); els.inspector.classList.add("show"); renderInspector(); }
+  function renderInspector(){
+    const n=nodeInCurrent(ui.inspectId); if(!n){ closeDrawers(); return; }
+    const t=TYPES[n.type]; const {a,total}=answeredCount(n); const pct=total?Math.round(a/total*100):0;
+    let html=`<div class="insp-meta">Editing: <b>${escapeHtml(n.text||"(untitled node)")}</b></div>`;
+    html+='<div class="insp-label">Type</div><div class="insp-types">';
+    TYPE_ORDER.forEach(k=>{ const tt=TYPES[k]; html+=`<button class="insp-type${n.type===k?' sel':''}" data-type="${k}" style="${n.type===k?`border-color:${tt.color};background:${hexA(tt.color,.14)};color:${tt.color}`:''}">${tt.icon} ${tt.label}</button>`; });
+    html+='</div>';
+    html+='<div class="insp-label">Notes</div><textarea class="insp-notes" id="inspNotes" placeholder="Free notes, a draft paragraph, a quote…"></textarea>';
+    html+=`<div class="insp-label">Argument check — ${t.label} <span id="chkCount" style="color:var(--muted);font-weight:600;text-transform:none;letter-spacing:0">(${a}/${total})</span></div>`;
+    html+=`<div class="insp-progress"><span style="width:${pct}%"></span></div>`;
+    t.prompts.forEach((q,i)=>{ html+=`<div class="insp-q"><div class="q"><span class="qi">${i+1}</span><span>${escapeHtml(q)}</span></div><textarea data-check="${i}" placeholder="Your answer…"></textarea></div>`; });
+    els.inspBody.innerHTML=html;
+    els.inspBody.querySelector("#inspNotes").value=n.notes||"";
+    const checks=n.checks[n.type]||{};
+    els.inspBody.querySelectorAll("[data-check]").forEach(ta=>{ ta.value=checks[ta.dataset.check]||""; });
+    // wire
+    els.inspBody.querySelectorAll("[data-type]").forEach(b=>b.addEventListener("click",()=>{ if(n.type===b.dataset.type)return; beginChange(); n.type=b.dataset.type; n.color=TYPES[n.type].color; renderInspector(); renderMap(); scheduleSave(); }));
+    const notes=els.inspBody.querySelector("#inspNotes"); notes.addEventListener("focus",armChange); notes.addEventListener("input",()=>{ commitArmed(); n.notes=notes.value; scheduleSave(); });
+    els.inspBody.querySelectorAll("[data-check]").forEach(ta=>{ ta.addEventListener("focus",armChange); ta.addEventListener("input",()=>{ commitArmed(); if(!n.checks[n.type]) n.checks[n.type]={}; n.checks[n.type][ta.dataset.check]=ta.value; updateInspProgress(n); scheduleSave(); }); ta.addEventListener("blur",()=>renderMap()); });
+  }
+  function updateInspProgress(n){ const {a,total}=answeredCount(n); const bar=els.inspBody.querySelector(".insp-progress > span"); if(bar) bar.style.width=(total?Math.round(a/total*100):0)+"%"; const cc=els.inspBody.querySelector("#chkCount"); if(cc) cc.textContent=`(${a}/${total})`; }
+  function nodeInCurrent(id){ return currentMap().nodes.find(n=>n.id===id); }
+
+  // ---- parking lot ----
+  function openParking(){ els.inspector.classList.remove("show"); els.parking.classList.add("show"); renderParking(); setTimeout(()=>els.parkText.focus(),60); }
+  function renderParking(){
+    els.parkList.innerHTML="";
+    if(!state.parking.length){ els.parkList.innerHTML='<div class="park-empty">Nothing parked yet.<br>Thoughts you dump here wait until you\'re ready for them.</div>'; return; }
+    state.parking.forEach(item=>{
+      const d=document.createElement("div"); d.className="park-item";
+      d.innerHTML=`<div class="pt">${escapeHtml(item.text)}</div><div class="pa"><button class="mini" data-map title="Drop into current map as a node">→ map</button><button class="mini" data-del title="Delete">🗑</button></div>`;
+      d.querySelector("[data-map]").onclick=()=>{ beginChange(); const m=currentMap(); const r=els.canvasWrap.getBoundingClientRect(); const nn=mkNode(item.text,"idea",(r.width/2-m.pan.x)/m.zoom-NODE_W/2,(r.height/2-m.pan.y)/m.zoom-30); nn.color=chapter().color; m.nodes.push(nn); state.parking=state.parking.filter(x=>x.id!==item.id); renderParking(); renderMap(); renderChapters(); scheduleSave(); };
+      d.querySelector("[data-del]").onclick=()=>{ beginChange(); state.parking=state.parking.filter(x=>x.id!==item.id); renderParking(); scheduleSave(); };
+      els.parkList.appendChild(d);
     });
   }
-  function openSwatches(anchor,cb,current){
-    buildSwatches(els.swatches,cb,current);
-    const r=anchor.getBoundingClientRect();
-    els.swatches.style.left=Math.min(window.innerWidth-190,r.left)+"px";
-    els.swatches.style.top=(r.bottom+6)+"px";
-    els.swatches.classList.add("show");
-  }
-  function closeSwatches(){ els.swatches.classList.remove("show"); }
-  document.addEventListener("pointerdown",e=>{ if(!e.target.closest(".swatches")&&!e.target.closest("[data-color]")) closeSwatches(); });
+  function addParking(){ const t=els.parkText.value.trim(); if(!t)return; beginChange(); state.parking.unshift({id:uid(),text:t}); els.parkText.value=""; renderParking(); scheduleSave(); }
 
-  // ---------- modal ----------
-  function openModal({title,desc,value,color,ok}){
-    els.modalTitle.textContent=title; els.modalDesc.textContent=desc;
-    els.modalInput.value=value||""; ui.modalColor=color||COLORS[0]; ui.modalCb=ok;
-    buildSwatches(els.modalSwatches,c=>{ ui.modalColor=c; markModalSwatch(c); }, ui.modalColor);
-    els.overlay.classList.add("show");
-    setTimeout(()=>{ els.modalInput.focus(); els.modalInput.select(); },40);
-  }
-  function markModalSwatch(c){
-    els.modalSwatches.querySelectorAll(".swatch").forEach(s=>s.classList.toggle("sel",s.style.background===hexToRgbStr(c)));
-  }
-  function hexToRgbStr(hex){
-    const n=parseInt(hex.slice(1),16); return `rgb(${(n>>16)&255}, ${(n>>8)&255}, ${n&255})`;
-  }
-  function closeModal(){ els.overlay.classList.remove("show"); ui.modalCb=null; }
-  function commitModal(){
-    if(ui.modalCb){ ui.modalCb(els.modalInput.value.trim(), ui.modalColor); }
-    closeModal();
-  }
+  function closeDrawers(){ els.inspector.classList.remove("show"); els.parking.classList.remove("show"); ui.inspectId=null; }
 
-  // ---------- chapters CRUD ----------
+  // ---- chapters CRUD + templates ----
   function newChapter(){
-    openModal({
-      title:"New chapter", desc:"Give your chapter a name and colour so it's easy to recognise.",
-      value:"Chapter "+(state.chapters.length+1)+" — ", color:COLORS[state.chapters.length%COLORS.length],
-      ok:(name,color)=>{
-        const ch={id:uid(),title:name||("Chapter "+(state.chapters.length+1)),color,rq:"",thesis:"",argument:"",
-          map:{pan:{x:120,y:90},zoom:1,nodes:[],edges:[]}};
-        state.chapters.push(ch); state.currentChapterId=ch.id; ui.path=[];
-        renderAll(); scheduleSave();
-      }
-    });
+    ui.modalTpl="blank";
+    openModal({ title:"New chapter", desc:"Name it, pick a colour, and optionally start from a template.", value:"Chapter "+(state.chapters.length+1)+" — ", color:COLORS[state.chapters.length%COLORS.length], showTpl:true,
+      ok:(name,color,tpl)=>{ beginChange(); const built=(TEMPLATES.find(t=>t.key===tpl)||TEMPLATES[0]).build();
+        const ch={id:uid(),title:name||("Chapter "+(state.chapters.length+1)),color,rq:"",thesis:"",argument:"",map:{pan:{x:140,y:70},zoom:1,nodes:built.nodes,edges:built.edges}};
+        state.chapters.push(ch); state.currentChapterId=ch.id; ui.path=[]; ui.selected=null; closeDrawers(); renderAll(); scheduleSave(); } });
   }
-  function renameChapter(){
-    const ch=chapter();
-    openModal({title:"Edit chapter", desc:"Rename or recolour this chapter.", value:ch.title, color:ch.color,
-      ok:(name,color)=>{ ch.title=name||ch.title; ch.color=color; renderAll(); scheduleSave(); }});
+  function renameChapter(){ const ch=chapter(); openModal({ title:"Edit chapter", desc:"Rename or recolour this chapter.", value:ch.title, color:ch.color, showTpl:false, ok:(name,color)=>{ beginChange(); ch.title=name||ch.title; ch.color=color; renderAll(); scheduleSave(); } }); }
+  function deleteChapter(){ if(state.chapters.length<=1){ alert("Keep at least one chapter. Create another before deleting this one."); return; } if(!confirm(`Delete "${chapter().title}" and its whole map? Export a backup first if unsure.`)) return; beginChange(); state.chapters=state.chapters.filter(c=>c.id!==state.currentChapterId); state.currentChapterId=state.chapters[0].id; ui.path=[]; ui.selected=null; closeDrawers(); renderAll(); scheduleSave(); }
+
+  // ---- export / import ----
+  function exportData(){ const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="dissertation-map-"+new Date().toISOString().slice(0,10)+".json"; a.click(); URL.revokeObjectURL(a.href); note("✓ Backup downloaded"); }
+  function importData(file){ const reader=new FileReader(); reader.onload=()=>{ try{ const d=JSON.parse(reader.result); if(!d.chapters||!Array.isArray(d.chapters)) throw 0; if(!confirm("Replace everything currently on this device with the imported file?")) return; past.length=0; futur.length=0; updateUndo(); state=migrate(d); if(!chapter()) state.currentChapterId=state.chapters[0].id; ui.path=[]; ui.selected=null; closeDrawers(); applyTheme(); renderAll(); save(); }catch(e){ alert("That file couldn't be read as a Dissertation Mapping backup."); } }; reader.readAsText(file); }
+
+  // ---- theme ----
+  function applyTheme(){ document.documentElement.setAttribute("data-theme", state.theme); document.documentElement.classList.toggle("dys", !!state.dys); els.themeBtn.textContent = state.theme==="dark"?"🌙":"☀"; els.themeBtn.title = state.theme==="dark"?"Switch to light":"Switch to dark"; els.dysBtn.classList.toggle("on", !!state.dys); }
+  function toggleTheme(){ state.theme = state.theme==="dark"?"light":"dark"; applyTheme(); scheduleSave(); }
+  function toggleDys(){ state.dys=!state.dys; applyTheme(); scheduleSave(); }
+
+  // ---- print ----
+  function wrapText(s,max){ const words=(s||"").split(/\s+/); const lines=[]; let line=""; words.forEach(w=>{ if((line+" "+w).trim().length>max){ if(line)lines.push(line); line=w; } else line=(line?line+" ":"")+w; }); if(line)lines.push(line); return lines.length?lines:[""]; }
+  function buildPrint(){
+    const ch=chapter(); const map=chapter().map;
+    // header + argument
+    let html=`<h1>${escapeHtml(ch.title)}</h1>`;
+    const argRows=[["Research question",ch.rq],["Thesis / claim",ch.thesis],["Argument summary",ch.argument]].filter(r=>r[1]&&r[1].trim());
+    if(argRows.length){ html+='<div class="p-arg">'; argRows.forEach(r=>{ html+=`<b>${r[0]}</b>${escapeHtml(r[1])}`; }); html+='</div>'; }
+    // svg of the map
+    html+='<div class="p-sec">Map</div>'+buildPrintSVG(map);
+    // outline
+    html+='<div class="p-sec">Outline</div>'+buildOutline(map);
+    els.printRoot.innerHTML=html;
+    window.print();
   }
-  function deleteChapter(){
-    if(state.chapters.length<=1){ alert("Keep at least one chapter. Create another before deleting this one."); return; }
-    if(!confirm(`Delete "${chapter().title}" and its whole map? This can't be undone (export a backup first if unsure).`)) return;
-    state.chapters=state.chapters.filter(c=>c.id!==state.currentChapterId);
-    state.currentChapterId=state.chapters[0].id; ui.path=[];
-    renderAll(); scheduleSave();
+  function buildPrintSVG(map){
+    if(!map.nodes.length) return '<p style="color:#777;font-size:12px">This map is empty.</p>';
+    const H=[]; const boxes={};
+    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    map.nodes.forEach(n=>{ const lines=wrapText(n.text||"(untitled)",26); const h=26+lines.length*15+12; boxes[n.id]={x:n.x,y:n.y,w:NODE_W,h,lines}; minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+NODE_W); maxY=Math.max(maxY,n.y+h); });
+    const pad=24; const W=maxX-minX+pad*2, VH=maxY-minY+pad*2, ox=pad-minX, oy=pad-minY;
+    let defs='<defs>'; REL_ORDER.forEach(k=>{ defs+=`<marker id="par-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${RELS[k].color}"/></marker>`; }); defs+='</defs>';
+    let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${VH}" width="${W}" height="${VH}" font-family="Inter,Arial,sans-serif">${defs}<rect width="${W}" height="${VH}" fill="#fff"/>`;
+    map.edges.forEach(e=>{ const a=boxes[e.from], b=boxes[e.to]; if(!a||!b)return; const ax=a.x+a.w+ox, ay=a.y+22+oy, bx=b.x+ox, by=b.y+22+oy; const dx=Math.max(40,Math.abs(bx-ax)*.5); const rel=RELS[e.rel]||RELS.relates; s+=`<path d="M ${ax} ${ay} C ${ax+dx} ${ay}, ${bx-dx} ${by}, ${bx} ${by}" fill="none" stroke="${rel.color}" stroke-width="2" ${rel.dash?`stroke-dasharray="${rel.dash}"`:""} ${rel.arrow?`marker-end="url(#par-${e.rel})"`:""}/>`; if(e.label){ s+=`<text x="${(ax+bx)/2}" y="${(ay+by)/2-3}" text-anchor="middle" font-size="10" fill="${rel.color}" paint-order="stroke" stroke="#fff" stroke-width="3">${escapeHtml(e.label)}</text>`; } });
+    map.nodes.forEach(n=>{ const bx=boxes[n.id]; const x=bx.x+ox, y=bx.y+oy; const t=TYPES[n.type];
+      s+=`<g><rect x="${x}" y="${y}" width="${bx.w}" height="${bx.h}" rx="10" fill="#fff" stroke="#d5d8ea" stroke-width="1.2"/><rect x="${x}" y="${y}" width="${bx.w}" height="5" rx="2.5" fill="${n.color}"/>`;
+      bx.lines.forEach((ln,i)=>{ s+=`<text x="${x+11}" y="${y+22+i*15}" font-size="12.5" font-weight="600" fill="#1b2030">${escapeHtml(ln)}</text>`; });
+      s+=`<text x="${x+11}" y="${y+bx.h-6}" font-size="9" fill="${t.color}">${t.label.toUpperCase()}</text></g>`; });
+    s+='</svg>'; return s;
+  }
+  function buildOutline(map){
+    if(!map.nodes.length) return '<p style="color:#777;font-size:12px">No nodes.</p>';
+    const children={}; map.nodes.forEach(n=>children[n.id]=[]); map.edges.forEach(e=>{ if(children[e.from]) children[e.from].push(e.to); });
+    const indeg={}; map.nodes.forEach(n=>indeg[n.id]=0); map.edges.forEach(e=>{ if(indeg[e.to]!=null) indeg[e.to]++; });
+    let roots=map.nodes.filter(n=>indeg[n.id]===0).map(n=>n.id); if(!roots.length) roots=map.nodes.map(n=>n.id);
+    const seen=new Set();
+    const byId=id=>map.nodes.find(n=>n.id===id);
+    function li(id){ if(seen.has(id))return""; seen.add(id); const n=byId(id); if(!n)return""; let h=`<li>${escapeHtml(n.text||"(untitled)")}<span class="pt-type">${TYPES[n.type].label}</span>`; const kids=(children[id]||[]).filter(c=>!seen.has(c)); if(kids.length){ h+="<ul>"+kids.map(li).join("")+"</ul>"; } h+="</li>"; return h; }
+    let html="<ul>"+roots.map(li).join("")+"</ul>";
+    const orphans=map.nodes.filter(n=>!seen.has(n.id)); if(orphans.length){ html+="<ul>"+orphans.map(n=>{ seen.add(n.id); return `<li>${escapeHtml(n.text||"(untitled)")}<span class="pt-type">${TYPES[n.type].label}</span></li>`; }).join("")+"</ul>"; }
+    return html;
   }
 
-  // ---------- export / import ----------
-  function exportData(){
-    const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
-    a.download="dissertation-map-"+new Date().toISOString().slice(0,10)+".json";
-    a.click(); URL.revokeObjectURL(a.href);
-    note("✓ Backup downloaded");
+  // ---- modal ----
+  function openModal({title,desc,value,color,ok,showTpl}){
+    els.modalTitle.textContent=title; els.modalDesc.textContent=desc; els.modalInput.value=value||""; ui.modalColor=color||COLORS[0]; ui.modalCb=ok;
+    buildSwatchGrid(els.modalSwatches,c=>{ ui.modalColor=c; markModalSwatch(c); }, ui.modalColor); markModalSwatch(ui.modalColor);
+    els.tplWrap.style.display=showTpl?"block":"none";
+    if(showTpl){ ui.modalTpl="blank"; els.tplGrid.innerHTML=""; TEMPLATES.forEach(t=>{ const b=document.createElement("button"); b.className="tpl"+(t.key===ui.modalTpl?" sel":""); b.innerHTML=`<b>${t.name}</b><span>${t.desc}</span>`; b.onclick=()=>{ ui.modalTpl=t.key; els.tplGrid.querySelectorAll(".tpl").forEach((x,i)=>x.classList.toggle("sel",TEMPLATES[i].key===t.key)); }; els.tplGrid.appendChild(b); }); }
+    els.overlay.classList.add("show"); setTimeout(()=>{ els.modalInput.focus(); els.modalInput.select(); },40);
   }
-  function importData(file){
-    const reader=new FileReader();
-    reader.onload=()=>{
-      try{
-        const d=JSON.parse(reader.result);
-        if(!d.chapters||!Array.isArray(d.chapters)) throw new Error("bad");
-        if(!confirm("Replace everything currently on this device with the imported file?")) return;
-        state=d; if(!state.currentChapterId||!chapter()) state.currentChapterId=state.chapters[0].id;
-        ui.path=[]; renderAll(); save();
-      }catch(e){ alert("That file couldn't be read as a Dissertation Mapping backup."); }
-    };
-    reader.readAsText(file);
-  }
+  function markModalSwatch(c){ els.modalSwatches.querySelectorAll(".swatch").forEach(s=>s.classList.toggle("sel", s.style.background===hexToRgbStr(c))); }
+  function closeModal(){ els.overlay.classList.remove("show"); ui.modalCb=null; }
+  function commitModal(){ if(ui.modalCb) ui.modalCb(els.modalInput.value.trim(), ui.modalColor, ui.modalTpl); closeModal(); }
 
-  // ---------- misc ----------
+  // ---- utils ----
   function escapeHtml(s){ return (s||"").replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+  function hexToRgbStr(hex){ const n=parseInt(hex.slice(1),16); return `rgb(${(n>>16)&255}, ${(n>>8)&255}, ${n&255})`; }
+  function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`; }
 
-  function renderAll(){ renderChapters(); renderBreadcrumb(); renderArg(); renderMap(); }
+  function renderAll(){ renderChapters(); renderBreadcrumb(); renderArg(); renderMap(); if(els.inspector.classList.contains("show")) renderInspector(); if(els.parking.classList.contains("show")) renderParking(); }
 
-  // ---------- wiring ----------
+  // ---- events ----
   function wireEvents(){
     $("addChapterBtn").onclick=newChapter;
     $("renameChapterBtn").onclick=renameChapter;
@@ -800,10 +858,16 @@
     $("importBtn").onclick=()=>els.importFile.click();
     els.importFile.onchange=e=>{ if(e.target.files[0]) importData(e.target.files[0]); e.target.value=""; };
 
+    els.undoBtn.onclick=undo; els.redoBtn.onclick=redo;
+    $("parkBtn").onclick=()=>{ els.parking.classList.contains("show")?closeDrawers():openParking(); };
+    $("printBtn").onclick=buildPrint;
+    els.themeBtn.onclick=toggleTheme; els.dysBtn.onclick=toggleDys;
+    $("inspClose").onclick=closeDrawers; $("parkClose").onclick=closeDrawers;
+    $("parkAdd").onclick=addParking;
+    els.parkText.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); addParking(); } });
+
     $("argToggle").onclick=()=>els.argbar.classList.toggle("open");
-    els.fieldRQ.addEventListener("input",()=>{ chapter().rq=els.fieldRQ.value; renderArgHint(); scheduleSave(); });
-    els.fieldThesis.addEventListener("input",()=>{ chapter().thesis=els.fieldThesis.value; renderArgHint(); scheduleSave(); });
-    els.fieldArgument.addEventListener("input",()=>{ chapter().argument=els.fieldArgument.value; renderArgHint(); scheduleSave(); });
+    [["fieldRQ","rq"],["fieldThesis","thesis"],["fieldArgument","argument"]].forEach(([id,key])=>{ const el=els[id]; el.addEventListener("focus",armChange); el.addEventListener("input",()=>{ commitArmed(); chapter()[key]=el.value; renderArgHint(); scheduleSave(); }); });
 
     $("tbAdd").onclick=()=>addNode();
     $("emptyAddBtn").onclick=()=>addNode();
@@ -813,35 +877,27 @@
     $("tbZoomOut").onclick=()=>zoomButton(1/1.15);
     $("tbFit").onclick=fitMap;
 
-    $("modalCancel").onclick=closeModal;
-    $("modalOk").onclick=commitModal;
+    $("modalCancel").onclick=closeModal; $("modalOk").onclick=commitModal;
     els.modalInput.addEventListener("keydown",e=>{ if(e.key==="Enter") commitModal(); if(e.key==="Escape") closeModal(); });
     els.overlay.addEventListener("pointerdown",e=>{ if(e.target===els.overlay) closeModal(); });
 
     document.addEventListener("keydown",e=>{
-      if(e.target.matches("input,textarea")||e.target.isContentEditable){
-        if(e.key==="Escape") e.target.blur();
-        return;
-      }
-      if(e.key==="Escape"){ if(ui.connectMode) setConnect(false); closeSwatches(); }
+      const meta=e.ctrlKey||e.metaKey;
+      if(meta&&(e.key==="z"||e.key==="Z")){ e.preventDefault(); if(e.shiftKey) redo(); else undo(); return; }
+      if(meta&&(e.key==="y"||e.key==="Y")){ e.preventDefault(); redo(); return; }
+      if(e.target.matches("input,textarea")||e.target.isContentEditable){ if(e.key==="Escape") e.target.blur(); return; }
+      if(e.key==="Escape"){ if(ui.connectMode) setConnect(false); closeSwatches(); closeEdgePop(); closeDrawers(); }
       if((e.key==="Delete"||e.key==="Backspace")&&ui.selected){ e.preventDefault(); deleteSelected(); }
-      if(e.key==="c"||e.key==="C"){ setConnect(!ui.connectMode); }
-      if(e.key==="n"||e.key==="N"){ addNode(); }
-      if(e.key==="f"||e.key==="F"){ fitMap(); }
+      if(e.key==="c"||e.key==="C") setConnect(!ui.connectMode);
+      if(e.key==="n"||e.key==="N") addNode();
+      if(e.key==="f"||e.key==="F") fitMap();
     });
 
     wirePanZoom();
   }
-  function renderArgHint(){
-    const ch=chapter();
-    const filled=[ch.rq,ch.thesis,ch.argument].filter(x=>x&&x.trim()).length;
-    $("argHint").textContent = filled? `${filled}/3 written` : "Click to write your through-line";
-    renderChapters();
-  }
 
-  // ---------- boot ----------
-  wireEvents();
-  renderAll();
+  // ---- boot ----
+  applyTheme(); wireEvents(); updateUndo(); renderAll();
   window.addEventListener("beforeunload",save);
 })();
 </script>
