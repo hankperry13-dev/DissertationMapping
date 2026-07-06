@@ -97,6 +97,9 @@
   .edges path.hit{fill:none;stroke:transparent;stroke-width:16;pointer-events:stroke;cursor:pointer}
   .edges path.temp{fill:none;stroke:var(--accent-2);stroke-width:2.5;stroke-dasharray:6 6}
   .edges text{font-size:11px;font-weight:700;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+  .edges .handle{pointer-events:all;cursor:grab;opacity:.3;stroke:var(--panel);stroke-width:2;transition:opacity .12s}
+  .edges .handle:hover{opacity:1}
+  .edges .handle.bent{opacity:.7}
 
   .node{position:absolute;width:var(--node-w);background:var(--panel-2);border:1.5px solid var(--line);border-radius:13px;box-shadow:var(--shadow);user-select:none}
   .node .accent{height:6px;border-radius:12px 12px 0 0;background:var(--accent)}
@@ -290,6 +293,7 @@
       <div class="viewport" id="viewport">
         <svg class="edges" id="edges"></svg>
         <div id="nodes"></div>
+        <svg class="edges" id="edgeHandles"></svg>
       </div>
 
       <div class="hint" id="connectHint">Connect mode — click a node, then another to link them. <span class="kbd">Esc</span> to exit</div>
@@ -425,6 +429,7 @@
   let state = migrate(load() || seed());
   let ui = { path:[], selected:null, connectMode:false, connectSrc:null, inspectId:null, modalCb:null, modalColor:COLORS[0], modalTpl:"blank", showTpl:true };
   let saveTimer=null;
+  let nodeSizes={};
 
   function seed(){
     const chId=uid();
@@ -472,7 +477,7 @@
   const $=id=>document.getElementById(id);
   const els={
     app:$("app"), chapterList:$("chapterList"), breadcrumb:$("breadcrumb"),
-    viewport:$("viewport"), edges:$("edges"), nodes:$("nodes"), canvasWrap:$("canvasWrap"),
+    viewport:$("viewport"), edges:$("edges"), handles:$("edgeHandles"), nodes:$("nodes"), canvasWrap:$("canvasWrap"),
     zoomLabel:$("zoomLabel"), emptyState:$("emptyState"), connectHint:$("connectHint"),
     swatchPop:$("swatchPop"), swatchGrid:$("swatchGrid"), edgePop:$("edgePop"), saveNote:$("saveNote"),
     argbar:$("argbar"), fieldRQ:$("fieldRQ"), fieldThesis:$("fieldThesis"), fieldArgument:$("fieldArgument"),
@@ -551,6 +556,7 @@
     const {hidden,desc}=computeHidden(map);
     els.nodes.innerHTML="";
     map.nodes.forEach(n=>{ if(!hidden.has(n.id)) els.nodes.appendChild(buildNode(n,map,desc)); });
+    measureNodes();
     renderEdges(hidden);
     els.emptyState.style.display=map.nodes.length?"none":"grid";
   }
@@ -580,30 +586,77 @@
     return el;
   }
 
+  function measureNodes(){ nodeSizes={}; els.nodes.querySelectorAll(".node").forEach(el=>{ nodeSizes[el.dataset.id]={w:el.offsetWidth||NODE_W, h:el.offsetHeight||92}; }); }
+  function nodeRect(n){ const s=nodeSizes[n.id]||{w:NODE_W,h:92}; return {x:n.x,y:n.y,w:s.w,h:s.h}; }
+
+  // pick the facing side of each node so the connector leaves cleanly instead of weaving behind
+  function anchorPoints(ra,rb){
+    const acx=ra.x+ra.w/2, acy=ra.y+ra.h/2, bcx=rb.x+rb.w/2, bcy=rb.y+rb.h/2;
+    const dx=bcx-acx, dy=bcy-acy;
+    if(Math.abs(dx)>=Math.abs(dy)){
+      if(dx>=0) return {A:{x:ra.x+ra.w,y:acy}, B:{x:rb.x,y:bcy}, dA:{x:1,y:0}, dB:{x:-1,y:0}};
+      return {A:{x:ra.x,y:acy}, B:{x:rb.x+rb.w,y:bcy}, dA:{x:-1,y:0}, dB:{x:1,y:0}};
+    }
+    if(dy>=0) return {A:{x:acx,y:ra.y+ra.h}, B:{x:bcx,y:rb.y}, dA:{x:0,y:1}, dB:{x:0,y:-1}};
+    return {A:{x:acx,y:ra.y}, B:{x:bcx,y:rb.y+rb.h}, dA:{x:0,y:-1}, dB:{x:0,y:1}};
+  }
+  function catmullRomPath(pts){
+    if(pts.length<2) return "";
+    const p=[pts[0],...pts,pts[pts.length-1]];
+    let d=`M ${pts[0].x} ${pts[0].y}`;
+    for(let i=1;i<p.length-2;i++){ const p0=p[i-1],p1=p[i],p2=p[i+1],p3=p[i+2];
+      const c1={x:p1.x+(p2.x-p0.x)/6,y:p1.y+(p2.y-p0.y)/6}, c2={x:p2.x-(p3.x-p1.x)/6,y:p2.y-(p3.y-p1.y)/6};
+      d+=` C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${p2.x} ${p2.y}`; }
+    return d;
+  }
+  // returns {d, mid} in map coordinates. bend (optional) = a user-dragged waypoint the curve passes through.
+  function routeEdge(ra,rb,bend){
+    const {A,B,dA,dB}=anchorPoints(ra,rb);
+    if(bend) return {d:catmullRomPath([A,bend,B]), mid:{x:bend.x,y:bend.y}};
+    const dist=Math.hypot(B.x-A.x,B.y-A.y), k=Math.max(38,dist*0.4);
+    const c1={x:A.x+dA.x*k,y:A.y+dA.y*k}, c2={x:B.x+dB.x*k,y:B.y+dB.y*k};
+    const d=`M ${A.x} ${A.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${B.x} ${B.y}`;
+    const mid={x:(A.x+3*c1.x+3*c2.x+B.x)/8, y:(A.y+3*c1.y+3*c2.y+B.y)/8};
+    return {d,mid};
+  }
+
   function renderEdges(hidden){
-    const map=currentMap(); const svg=els.edges;
-    // defs with one arrow marker per rel colour
+    const map=currentMap();
     let defs='<defs>';
     REL_ORDER.forEach(k=>{ const c=RELS[k].color; defs+=`<marker id="ar-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`; });
     defs+='</defs>';
-    let html=defs;
+    let html=defs, handles="";
     map.edges.forEach(e=>{
       if(hidden.has(e.from)||hidden.has(e.to)) return;
       const a=map.nodes.find(n=>n.id===e.from), b=map.nodes.find(n=>n.id===e.to); if(!a||!b) return;
-      const ax=a.x+NODE_W, ay=a.y+44, bx=b.x, by=b.y+44;
-      const dx=Math.max(40,Math.abs(bx-ax)*0.5);
-      const d=`M ${ax} ${ay} C ${ax+dx} ${ay}, ${bx-dx} ${by}, ${bx} ${by}`;
+      const {d,mid}=routeEdge(nodeRect(a),nodeRect(b),e.bend);
       const rel=RELS[e.rel]||RELS.relates;
       const dash=rel.dash?`stroke-dasharray="${rel.dash}"`:"";
       const marker=rel.arrow?`marker-end="url(#ar-${e.rel})"`:"";
       html+=`<path class="wire" d="${d}" stroke="${rel.color}" ${dash} ${marker}/>`;
       html+=`<path class="hit" d="${d}" data-edge="${e.id}"/>`;
-      const label=e.label||"";
-      if(label){ const mx=(ax+bx)/2, my=(ay+by)/2-2; html+=`<text x="${mx}" y="${my}" text-anchor="middle" fill="${rel.color}">${escapeHtml(label)}</text>`; }
+      if(e.label){ html+=`<text x="${mid.x}" y="${mid.y-8}" text-anchor="middle" fill="${rel.color}">${escapeHtml(e.label)}</text>`; }
+      handles+=`<circle class="handle${e.bend?' bent':''}" data-h="${e.id}" cx="${mid.x}" cy="${mid.y}" r="6" fill="${rel.color}"/>`;
     });
-    svg.innerHTML=html;
-    svg.querySelectorAll("path.hit").forEach(p=>{ p.addEventListener("click",ev=>{ ev.stopPropagation(); openEdgePop(p.dataset.edge, ev.clientX, ev.clientY); }); });
+    els.edges.innerHTML=html;
+    els.handles.innerHTML=handles;
+    els.edges.querySelectorAll("path.hit").forEach(p=>{ p.addEventListener("click",ev=>{ ev.stopPropagation(); openEdgePop(p.dataset.edge, ev.clientX, ev.clientY); }); });
+    els.handles.querySelectorAll(".handle").forEach(c=>{
+      c.addEventListener("pointerdown",ev=>startBendDrag(c.dataset.h,ev));
+      c.addEventListener("dblclick",ev=>{ ev.stopPropagation(); resetBend(c.dataset.h); });
+    });
   }
+
+  function startBendDrag(edgeId,ev){
+    ev.stopPropagation(); ev.preventDefault();
+    const m=currentMap(); const e=m.edges.find(x=>x.id===edgeId); if(!e) return;
+    armChange(); let moved=false;
+    const pt=e2=>{ const r=els.viewport.getBoundingClientRect(); return {x:(e2.clientX-r.left)/m.zoom, y:(e2.clientY-r.top)/m.zoom}; };
+    function move(e2){ if(!moved){ moved=true; commitArmed(); } e.bend=pt(e2); renderEdges(computeHidden(m).hidden); }
+    function up(){ window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); if(moved) scheduleSave(); else armed=null; }
+    window.addEventListener("pointermove",move); window.addEventListener("pointerup",up);
+  }
+  function resetBend(edgeId){ const m=currentMap(); const e=m.edges.find(x=>x.id===edgeId); if(!e||!e.bend) return; beginChange(); delete e.bend; renderEdges(computeHidden(m).hidden); scheduleSave(); }
 
   function applyTransform(){ const m=currentMap(); els.viewport.style.transform=`translate(${m.pan.x}px, ${m.pan.y}px) scale(${m.zoom})`; els.zoomLabel.textContent=Math.round(m.zoom*100)+"%"; }
 
@@ -712,9 +765,12 @@
     const m=currentMap(); const e=m.edges.find(x=>x.id===edgeId); if(!e)return;
     let html='<div class="pop-title">Connection type</div><div class="rel-list">';
     REL_ORDER.forEach(k=>{ const r=RELS[k]; html+=`<div class="rel-opt${e.rel===k?' sel':''}" data-rel="${k}"><span class="rel-line" style="border-top-color:${r.color};border-top-style:${r.dash?'dashed':'solid'}"></span>${r.label}</div>`; });
-    html+='</div><input class="rel-input" id="relLabel" placeholder="Optional label…" maxlength="40"/><button class="btn danger tiny pop-del" id="edgeDel">🗑 Remove connection</button>';
+    html+='</div><input class="rel-input" id="relLabel" placeholder="Optional label…" maxlength="40"/>';
+    html+=`<button class="btn ghost tiny pop-del" id="edgeStraight" ${e.bend?'':'disabled'} title="Reset the curve to auto-routing">↔ Straighten curve</button>`;
+    html+='<button class="btn danger tiny pop-del" id="edgeDel">🗑 Remove connection</button>';
     els.edgePop.innerHTML=html;
     els.edgePop.querySelector("#relLabel").value=e.label||"";
+    els.edgePop.querySelector("#edgeStraight").addEventListener("click",()=>{ resetBend(edgeId); const b=els.edgePop.querySelector("#edgeStraight"); if(b) b.disabled=true; });
     els.edgePop.querySelectorAll("[data-rel]").forEach(o=>o.addEventListener("click",()=>{ beginChange(); e.rel=o.dataset.rel; renderEdges(computeHidden(m).hidden); els.edgePop.querySelectorAll("[data-rel]").forEach(x=>x.classList.toggle("sel",x===o)); scheduleSave(); }));
     const inp=els.edgePop.querySelector("#relLabel");
     inp.addEventListener("focus",armChange);
@@ -814,7 +870,12 @@
     const pad=24; const W=maxX-minX+pad*2, VH=maxY-minY+pad*2, ox=pad-minX, oy=pad-minY;
     let defs='<defs>'; REL_ORDER.forEach(k=>{ defs+=`<marker id="par-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${RELS[k].color}"/></marker>`; }); defs+='</defs>';
     let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${VH}" width="${W}" height="${VH}" font-family="Inter,Arial,sans-serif">${defs}<rect width="${W}" height="${VH}" fill="#fff"/>`;
-    map.edges.forEach(e=>{ const a=boxes[e.from], b=boxes[e.to]; if(!a||!b)return; const ax=a.x+a.w+ox, ay=a.y+22+oy, bx=b.x+ox, by=b.y+22+oy; const dx=Math.max(40,Math.abs(bx-ax)*.5); const rel=RELS[e.rel]||RELS.relates; s+=`<path d="M ${ax} ${ay} C ${ax+dx} ${ay}, ${bx-dx} ${by}, ${bx} ${by}" fill="none" stroke="${rel.color}" stroke-width="2" ${rel.dash?`stroke-dasharray="${rel.dash}"`:""} ${rel.arrow?`marker-end="url(#par-${e.rel})"`:""}/>`; if(e.label){ s+=`<text x="${(ax+bx)/2}" y="${(ay+by)/2-3}" text-anchor="middle" font-size="10" fill="${rel.color}" paint-order="stroke" stroke="#fff" stroke-width="3">${escapeHtml(e.label)}</text>`; } });
+    map.edges.forEach(e=>{ const a=boxes[e.from], b=boxes[e.to]; if(!a||!b)return;
+      const ra={x:a.x+ox,y:a.y+oy,w:a.w,h:a.h}, rb={x:b.x+ox,y:b.y+oy,w:b.w,h:b.h};
+      const bend=e.bend?{x:e.bend.x+ox,y:e.bend.y+oy}:null;
+      const {d,mid}=routeEdge(ra,rb,bend); const rel=RELS[e.rel]||RELS.relates;
+      s+=`<path d="${d}" fill="none" stroke="${rel.color}" stroke-width="2" ${rel.dash?`stroke-dasharray="${rel.dash}"`:""} ${rel.arrow?`marker-end="url(#par-${e.rel})"`:""}/>`;
+      if(e.label){ s+=`<text x="${mid.x}" y="${mid.y-6}" text-anchor="middle" font-size="10" fill="${rel.color}" paint-order="stroke" stroke="#fff" stroke-width="3">${escapeHtml(e.label)}</text>`; } });
     map.nodes.forEach(n=>{ const bx=boxes[n.id]; const x=bx.x+ox, y=bx.y+oy; const t=TYPES[n.type];
       s+=`<g><rect x="${x}" y="${y}" width="${bx.w}" height="${bx.h}" rx="10" fill="#fff" stroke="#d5d8ea" stroke-width="1.2"/><rect x="${x}" y="${y}" width="${bx.w}" height="5" rx="2.5" fill="${n.color}"/>`;
       bx.lines.forEach((ln,i)=>{ s+=`<text x="${x+11}" y="${y+22+i*15}" font-size="12.5" font-weight="600" fill="#1b2030">${escapeHtml(ln)}</text>`; });
