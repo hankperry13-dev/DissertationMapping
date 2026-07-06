@@ -21,6 +21,7 @@ Everything you type is saved automatically in your browser on that device. Use *
 - **Argument panel** — per‑chapter **Research question**, **Thesis / claim**, and **Argument summary** fields to hold your through‑line.
 - **Argument‑checker prompts** — give a node a *type* (Claim, Evidence, Counter‑point, Gap, Method, Source, Question, To‑do, Idea) and the details panel asks type‑specific questions ("What evidence backs it up?", "What would a critic say?") with answer boxes and a completeness meter. Free‑form **notes** live here too.
 - **Collapse / expand** — fold a node's branch (the `−`/`+` button under it) to hide its descendants and cut visual load; the button shows how many nodes are hidden.
+- **Flexible connectors** — connectors leave whichever side of a node faces the target, so they emerge cleanly instead of ducking behind boxes. Grab the dot on the middle of any connection and drag it to route the line wherever you want (around other nodes); "Straighten curve" in the connection menu resets it to auto‑routing.
 - **Connection styles** — click any connection to set its relationship — *Relates to, Leads to, Supports, Contradicts, Causes, Example of* — each with its own colour, line style and arrow, plus an optional label.
 - **Parking lot** (`🅿`) — a per‑chapter scratch drawer to dump stray thoughts the moment they occur, without derailing; sort them into that chapter's map (or delete them) later.
 - **Undo / redo** — full history with the toolbar arrows or `Ctrl/Cmd+Z` and `Ctrl/Cmd+Y` (`Shift` to redo).
